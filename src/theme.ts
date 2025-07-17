@@ -37,7 +37,11 @@ const theme = createTheme({
     },
     typography: {
         fontFamily: 'Roboto, sans-serif',
+        button: {
+            textTransform: 'none',
+        },
     },
+    
     components: {
         MuiBottomNavigation: {
             styleOverrides: {

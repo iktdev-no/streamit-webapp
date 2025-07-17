@@ -11,6 +11,7 @@ import { selectProfile } from "../../store/appSlice";
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import SubtitlesIcon from '@mui/icons-material/Subtitles';
+import StreamIcon from '@mui/icons-material/Stream';
 
 export default function MoreFragment() {
     const profile = useSelector(selectProfile);
@@ -51,11 +52,18 @@ export default function MoreFragment() {
         }
     ];
 
-        const settingsGroup: InfoItem[] = [
+    const settingsGroup: InfoItem[] = [
         {
             id: "subtitle",
             icon: <SubtitlesIcon />,
             text: "Undertekster",
+            variant: "default",
+            onClick: () => { }
+        },
+        {
+            id: "server",
+            icon: <StreamIcon />,
+            text: "Strømmetjener",
             variant: "default",
             onClick: () => { }
         }
@@ -91,7 +99,7 @@ export default function MoreFragment() {
 
 
     return (
-        <Box sx={{mr: 20, ml: 20}}>
+        <Box sx={{ mr: 20, ml: 20 }}>
             <Box>
                 <img src={profile?.imageSrc!} style={{
                     height: 150,
@@ -108,11 +116,11 @@ export default function MoreFragment() {
             <InfoList sx={{
                 mt: 2,
                 mb: 2,
-            }} items={settingsGroup} orientation="horizontal" />
+            }} items={settingsGroup} />
 
             <InfoList items={infoGroup} />
 
-            
+
         </Box>
     );
 }

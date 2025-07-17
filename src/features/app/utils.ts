@@ -118,3 +118,12 @@ export const useVideoDecoderSupport = (): CodecSupport => {
 
   return support;
 };
+
+export function generateRandomPin(length: number): string {
+  const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let pin = "";
+  for (let i = 0; i < length; i++) {
+    pin += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+  return pin;
+}

@@ -7,6 +7,7 @@ import React from 'react'
 import { Block } from '@mui/icons-material'
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from './theme.ts'
+import './features/app/FirebaseMessageService.ts';
 
 
 const ServerBanner: React.FC = () => {

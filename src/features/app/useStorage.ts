@@ -1,40 +1,80 @@
+import type { PfnsInfo } from "../../types/firebase";
+import { NotificationStatus } from "../../types/notification";
 import type { ServerInfo } from "../../types/serverInfo";
 
-
-export function getServer(): ServerInfo | null {
-
-
-    const raw = localStorage.getItem('selectedServer');
-    if (!raw) return null;
-
-    try {
-        return JSON.parse(raw) as ServerInfo;
-    } catch {
-        return null;
-    }
+export interface StorageHandler<T> {
+    get(): T | undefined;
+    set(data: T): void;
+    clear(): void;
 }
 
-export function getServerId(): string | null {
 
-    return localStorage.getItem("selected_server_id")
+function createStorageHandler<T>(key: string | undefined, fallback: T) {
+    return {
+        get(): T {
+            if (!key) {
+                console.warn("Attempted to get storage with undefined key");
+                return fallback;
+            }
+
+            const raw = localStorage.getItem(key);
+            if (!raw) return fallback;
+            try {
+                return JSON.parse(raw) as T;
+            } catch {
+                return fallback;
+            }
+        },
+        set(data: T): void {
+            if (!key) {
+                console.warn("Attempted to set storage with undefined key");
+                return;
+            }
+            localStorage.setItem(key, JSON.stringify(data));
+        },
+        clear(): void {
+            if (!key) {
+                console.warn("Attempted to clear storage with undefined key");
+                return;
+            }
+            localStorage.removeItem(key);
+        }
+    };
 }
 
-function getServerTokenKey(): string | null {
-    const serverId = getServerId()
-    if (!serverId) {
-        return null;
-    }
-    return `selected_server_${serverId}_token`
+// Usage
+export const notificationStorage = createStorageHandler<NotificationStatus>(
+    'notificationStatus',
+    NotificationStatus.Default
+);
+
+
+function debugServer(): ServerInfo | null {
+    if (window.location.hostname === 'localhost') {
+        return {
+            id: "031766F8DA8F",
+            name: "Aura",
+            lan: "http://streamit.lan",
+            remote: "https://streamit1.skjonborg.no",
+        } as ServerInfo;
+    } return null
 }
 
-export function getAccessToken(): string | null {
+export const serverStorage = createStorageHandler<ServerInfo | null>(
+    'selectedServer',
+    null //debugServer()
+);
 
-    const key = getServerTokenKey()
-    if (!key) {
-        return null;
-    }
-    return localStorage.getItem(key);
-}
+export const serverAccessTokenStorage = createStorageHandler<string | null>(
+    serverStorage.get()?.id,
+    null
+);
+
+export const pfnsInfoStorage = createStorageHandler<PfnsInfo | null>(
+    'pfnsInfo',
+    null
+);
+
 
 export const FavoritesStorage = {
     get(): number[] {

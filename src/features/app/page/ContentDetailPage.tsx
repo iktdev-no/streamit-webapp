@@ -87,14 +87,14 @@ export default function ContentDetailPage() {
         }
         setFavorited(!isFavorited);
 
-        /*toast.info("🚧 Denne funksjonen er ikke implementert ennå.", {
+        toast.info("🚧 Denne funksjonen er ikke implementert ennå.", {
             position: "bottom-right",
             autoClose: 3000,
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: false,
             draggable: false,
-            });*/
+            });
     }
 
     if (loading) return <CircularProgress />;
