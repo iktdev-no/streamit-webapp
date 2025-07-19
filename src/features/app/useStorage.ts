@@ -25,12 +25,13 @@ function createStorageHandler<T>(key: string | undefined, fallback: T) {
                 return fallback;
             }
         },
-        set(data: T): void {
-            if (!key) {
+        set(data: T, manualKey: string | null = null): void {
+            const useKey = manualKey ?? key;
+            if (!useKey) {
                 console.warn("Attempted to set storage with undefined key");
                 return;
             }
-            localStorage.setItem(key, JSON.stringify(data));
+            localStorage.setItem(useKey, JSON.stringify(data));
         },
         clear(): void {
             if (!key) {
@@ -49,26 +50,48 @@ export const notificationStorage = createStorageHandler<NotificationStatus>(
 );
 
 
-function debugServer(): ServerInfo | null {
-    if (window.location.hostname === 'localhost') {
-        return {
-            id: "031766F8DA8F",
-            name: "Aura",
-            lan: "http://streamit.lan",
-            remote: "https://streamit1.skjonborg.no",
-        } as ServerInfo;
-    } return null
-}
-
 export const serverStorage = createStorageHandler<ServerInfo | null>(
     'selectedServer',
     null //debugServer()
 );
 
-export const serverAccessTokenStorage = createStorageHandler<string | null>(
-    serverStorage.get()?.id,
-    null
-);
+
+export function serverAccessTokenStorage(key: string | undefined) {
+    const serverKey = key ? `selectedServerAccessToken_${key}` : undefined;
+
+    return {
+        get(): string | null {
+            if (!serverKey) {
+                console.warn("Attempted to get storage with undefined key");
+                return null;
+            }
+
+            const raw = localStorage.getItem(serverKey);
+            return raw ?? null;
+        },
+        set(data: string | null): void {
+            if (!serverKey) {
+                console.warn("Attempted to set storage with undefined key");
+                return;
+            }
+            if (data === null) {
+                localStorage.removeItem(serverKey);
+                return;
+            }
+            localStorage.setItem(serverKey, data);
+        },
+        clear(): void {
+            if (!serverKey) {
+                console.warn("Attempted to clear storage with undefined key");
+                return;
+            }
+            localStorage.removeItem(serverKey);
+        }
+    };
+}
+
+
+
 
 export const pfnsInfoStorage = createStorageHandler<PfnsInfo | null>(
     'pfnsInfo',

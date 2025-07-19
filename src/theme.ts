@@ -41,7 +41,7 @@ const theme = createTheme({
             textTransform: 'none',
         },
     },
-    
+
     components: {
         MuiBottomNavigation: {
             styleOverrides: {
@@ -58,6 +58,11 @@ const theme = createTheme({
                         color: '#FF0000', // aktiv ikon og tekst
                     },
                 },
+            },
+        },
+        MuiCircularProgress: {
+            defaultProps: {
+                color: 'secondary', // Bruk 'primary', 'secondary', 'error', 'info', 'success', 'warning' eller 'inherit'
             },
         },
     }

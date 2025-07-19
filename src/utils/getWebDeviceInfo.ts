@@ -1,14 +1,9 @@
 import { UAParser } from 'ua-parser-js';
+import type { RequestDeviceInfo } from '../types/notification';
 
-export interface RegisterDeviceData {
-  name: string;
-  model: string;
-  manufacturer: string;
-  clientOrOsVersion: string;
-  clientOrOsPlatform: string;
-}
 
-export const getWebClientDeviceInfo = (): RegisterDeviceData => {
+
+export const getWebClientDeviceInfo = (): RequestDeviceInfo => {
   const result = UAParser(); // safe over HTTP
 
   const browserName = result.browser.name ?? 'Web Browser';

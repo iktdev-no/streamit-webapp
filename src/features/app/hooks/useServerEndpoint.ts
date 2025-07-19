@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { ServerInfo } from '../../../types/serverInfo';
 import { Logger, useLogger } from '../utils'
-import { getAccessToken } from '../useStorage';
+import { serverAccessTokenStorage } from '../useStorage';
 
 interface NavigatorStandalone extends Navigator {
   standalone?: boolean;
@@ -17,7 +17,7 @@ function isStandaloneMode(): boolean {
   return standalone;
 }
 
-async function probeHeartbeat(url: string): Promise<boolean> {
+export async function probeHeartbeat(url: string): Promise<boolean> {
   const log = Logger()
   log.info(`Prober ${url}/api/heartbeat`);
   try {
@@ -33,7 +33,7 @@ async function probeHeartbeat(url: string): Promise<boolean> {
   }
 }
 
-async function validateToken(url: string, token: string | null): Promise<boolean> {
+export async function validateToken(url: string, token: string | null): Promise<boolean> {
   const log = Logger()
   if (!token) {
     log.info(`Ingen token — hopper over validering`);
@@ -57,7 +57,7 @@ async function validateToken(url: string, token: string | null): Promise<boolean
   }
 }
 
-export default function useServer(serverInfo: ServerInfo): string | null {
+export default function useServer(serverInfo: ServerInfo, onRequiresAuth: () => void): string | null {
   const [endpoint, setEndpoint] = useState<string | null>(null);
   const log = useLogger()
 
@@ -69,7 +69,7 @@ export default function useServer(serverInfo: ServerInfo): string | null {
       }
 
       const { lan, remote } = serverInfo;
-      const token = getAccessToken();
+      const token = serverAccessTokenStorage(serverInfo.id).get();
 
       log.info(`Starter oppdagelse…`);
 
@@ -89,7 +89,9 @@ export default function useServer(serverInfo: ServerInfo): string | null {
             setEndpoint(remote);
             return;
           } else {
-            log.warn(`Remote svarte, men token er ugyldig → ignorerer`);
+            log.warn(`Remote svarte, men token er ugyldig`);
+            onRequiresAuth(); // Kall funksjonen for å håndtere auth
+            return
           }
         } else {
           log.warn(`Remote svarte ikke`);

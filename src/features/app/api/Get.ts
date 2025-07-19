@@ -1,6 +1,18 @@
 import { type Summary, type Catalog, type Episode, type Movie, type Serie, type Subtitle } from "../../../types/content";
 import type { Profile } from "../../../types/profile";
+import type { Heartbeat } from "../../../types/streamitTypes";
 import { getAbsoluteUrl, WebGet } from "./apiClient";
+
+
+export async function GetHeartbeat(serverAddress: string): Promise<Heartbeat | null> {
+    const response = await WebGet<Heartbeat>(serverAddress, ["heartbeat"]);
+    return response.data;
+}
+
+export async function GetIsDelegateRequired(serverAddress: string): Promise<boolean> {
+    const response = await WebGet<boolean>(serverAddress, ["auth", "delegate", "required"]);
+    return response.data;
+}
 
 
 export async function Profiles(): Promise<Profile[]> {
@@ -112,3 +124,4 @@ function setCoverSrc(baseUrl: string, item: Catalog): string | undefined {
       ? getAbsoluteUrl(baseUrl, ["stream", "media", "image", item.collection, item.cover])
       : undefined
 }
+

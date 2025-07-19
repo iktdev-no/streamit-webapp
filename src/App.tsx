@@ -16,7 +16,7 @@ import { NotificationGate } from './features/app/NotificationGate';
 import { shouldShowNotificationGate } from './utils/shouldShowNotificationGate';
 import type { ServerInfo } from './types/serverInfo';
 import SetupGate from './features/app/SetupGate';
-import { serverStorage } from './features/app/useStorage';
+import { serverAccessTokenStorage, serverStorage } from './features/app/useStorage';
 
 function App() {
   const [server, setServer] = useState<ServerInfo | null>(serverStorage.get());
@@ -34,10 +34,13 @@ function App() {
   }
 
   if (!server) {
-    return <SetupGate setServer={(server) => {
+    return <SetupGate setServer={(server, token) => {
+      console.log("🚀 Setter server og token:", server, token);
       serverStorage.set(server);
-      console.log("🚀 Server satt:", server);
-      setServer(server);
+      console.log("🚀 Server satt:", serverStorage.get());
+      serverAccessTokenStorage(server.id).set(token);
+      console.log("🚀 Token satt:", serverAccessTokenStorage(server.id).get());
+      setServer(server)
     }} />
   }
 

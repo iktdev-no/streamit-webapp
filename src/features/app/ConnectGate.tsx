@@ -1,24 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { useDispatch } from 'react-redux';
 import { selectServer, setToken, setActiveUrl } from './store/serverSlice';
 import useServer from './hooks/useServerEndpoint';
-import { getServer, getAccessToken } from './useStorage';
+import { serverAccessTokenStorage, serverStorage } from './useStorage';
+import GateAuthenticateUsingQR from './page/access/FastConnectUsingQR';
+import { Box } from '@mui/material';
+import FastConnectUsingQR from './page/access/FastConnectUsingQR';
 
 interface ConnectGateProps {
-    onReady: () => void;
-    onRequiresSetup: () => void;
+  onReady: () => void;
+  onRequiresSetup: () => void;
 }
 
 export function ConnectGate({ onReady, onRequiresSetup }: ConnectGateProps) {
+  const [requiresAuth, setRequiresAuth] = useState(false);
   const dispatch = useDispatch();
-  const server = getServer();
-  const token = getAccessToken();
+  const server = serverStorage.get();
+  const token = serverAccessTokenStorage(server?.id).get();
 
-    if (!server) {
-        onRequiresSetup();
-        return (<><p>Requires setup</p></>)
-    }
-  const endpoint = useServer(server); // NB! vi antar at server finnes i første versjon
+  if (!server) {
+    return showSetupScreen();
+  }
+  const endpoint = useServer(server, () => {
+    setRequiresAuth(true);
+    console.warn("Auth required, but not implemented yet.");
+  }); // NB! vi antar at server finnes i første versjon
 
   useEffect(() => {
     if (endpoint) {
@@ -29,10 +35,28 @@ export function ConnectGate({ onReady, onRequiresSetup }: ConnectGateProps) {
     }
   }, [endpoint]);
 
+  if (requiresAuth) {
+    return (
+      <GateAuthenticateUsingQR />
+    );
+  }
+
   return (
     <div>
       <p>Kobler til server...</p>
       {/* valgfritt bilde, loader, etc */}
     </div>
+  );
+}
+
+function showSetupScreen(): JSX.Element {
+  return (
+    <Box sx={{ display: 'flex', flexDirection: {
+        xs: 'column',
+        sm: 'column',
+        md: 'row',
+    }, alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <FastConnectUsingQR />
+    </Box>
   );
 }
