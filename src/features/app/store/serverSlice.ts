@@ -37,3 +37,4 @@ export const selectToken = (state: RootState) => state.server.token;
 export const selectActiveUrl = (state: RootState) => state.server.activeUrl;
 export const selectServerInfo = (state: RootState) => state.server.selectedServer;
 export const selectServerState = (state: RootState) => state.server;
+export const selectServerId = (state: RootState) => state.server.selectedServer?.id;

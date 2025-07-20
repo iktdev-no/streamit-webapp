@@ -1,141 +1,71 @@
-import { useEffect, useMemo, useState } from "react";
-import { Box, CircularProgress, useTheme } from "@mui/material";
-import { QRCodeCanvas } from "qrcode.react";
+import logo from '../../../assets/logo.svg';
+import { useMemo, useState } from "react";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import { usePfns } from "../hooks/usePfns";
 import { generateRandomPin } from "../utils";
-import { configureServerKey, useFcmListener } from "../hooks/useFcmListener";
-import { serverAccessTokenStorage } from "../useStorage";
 import type { ServerInfo } from "../../../types/serverInfo";
-import type { FcmPayload } from "../../../types/streamitTypes";
-import { useServerAuthenticationFlow, type SetupFlowStep } from "../hooks/useServerAuthorizationAndDelegation";
-import useServerVerification from "../hooks/useServerVerify";
+import type { PfnsObject } from "../../../types/streamitTypes";
+import Header from '../components/Header';
+import HttpIcon from '@mui/icons-material/Http';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import QRCodeAccessFlow from '../components/QRCodeAccessFlow';
+import ManualAccessFlow from '../components/ManualAccessFlow';
 
 interface SetupGateProps {
   setServer: (server: ServerInfo, token: string | null) => void;
 }
 
+type ActiveMode = 'manual' | 'qr' | null
+
 export default function SetupGate({ setServer }: SetupGateProps) {
   const theme = useTheme();
-  const [incomingServer, setIncomingServer] = useState<ServerInfo | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(serverAccessTokenStorage(incomingServer?.id).get());
-  const [flowStep, setFlowStep] = useState<SetupFlowStep>('idle');
+  const [activeMode, setActiveMode] = useState<ActiveMode>(null);
   const { pfnsInfo, loading: pfnsLoading } = usePfns();
+  const pinCode =  generateRandomPin(6)
 
-  const pfnsObject = useMemo(() => {
+  const pfnsObject: PfnsObject | null = useMemo(() => {
     if (!pfnsInfo?.pfnsId) return null;
-    return { pfnsReceiverId: pfnsInfo.pfnsId, pin: generateRandomPin(6) };
+    return { pfnsReceiverId: pfnsInfo.pfnsId, pin: pinCode };
   }, [pfnsInfo]);
 
-  useFcmListener(configureServerKey, (payload: FcmPayload) => {
-    const server = payload.data?.server;
-    try {
-      if (!server) return;
-      const parsedServer = JSON.parse(server);
-      setIncomingServer(parsedServer);
-    } catch (err) {
-      console.warn("Ugyldig FCM-serverdata:", err);
-    }
-  });
-
-  // Kjør verifisering og identifikasjon
-  useEffect(() => {
-    if (!incomingServer) return;
-
-    const { verifyLan, verifyRemote } = useServerVerification(incomingServer, accessToken);
-
-    const runFlow = async () => {
-      setFlowStep('identifying');
-
-      const lanResult = await verifyLan();
-      if (lanResult.reachable && !lanResult.requiresAuth) {
-        setFlowStep('connected');
-        setServer(incomingServer, accessToken); // Vi har tilgang uten auth
-        return;
-      }
-
-      const remoteResult = await verifyRemote();
-      if (
-        remoteResult.reachable &&
-        remoteResult.requiresAuth &&
-        remoteResult.tokenValid
-      ) {
-        // Token funker allerede – bare koble til
-        setFlowStep('connected');
-        setServer(incomingServer, accessToken);
-        return;
-      }
-
-      if (remoteResult.reachable && remoteResult.requiresAuth && pfnsObject) {
-        // Start autentisering via PIN/QR
-        setFlowStep('waitingForScan');
-      } else {
-        console.warn("Ingen tilgjengelig server eller token – avbryter");
-        setFlowStep('failed');
-      }
-    };
-
-    runFlow();
-  }, [incomingServer, pfnsObject]);
-
-  // Trigger autentiseringsflyt hvis remote krever det
-  const endpoint = incomingServer?.remote ?? null;
-  const shouldStartAuth = flowStep === 'waitingForScan';
-  const { token: receivedToken } = useServerAuthenticationFlow(endpoint, pfnsObject, shouldStartAuth, setFlowStep);
-
-  // Token ble mottatt – koble til!
-  useEffect(() => {
-    if (!receivedToken || !incomingServer) return;
-    setAccessToken(receivedToken);
-    setServer(incomingServer, receivedToken);
-  }, [receivedToken, incomingServer]);
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Box
-        sx={{
-          display: "flex",
-          padding: "2rem",
-          borderRadius: "8px",
-          backgroundColor: "primary.dark",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "2rem",
-        }}
-      >
-        {pfnsLoading && <CircularProgress size={80} sx={{ m: "50px" }} />}
-
-        {pfnsObject && (
-          <>
-            <QRCodeCanvas
-              value={JSON.stringify(pfnsObject)}
-              size={200}
-              bgColor={theme.palette.primary.dark}
-              fgColor="#FFF"
-            />
-            <div style={{ textAlign: 'center', fontSize: '1.1rem', fontWeight: 500 }}>
-              📲 Scan denne med <strong>StreamIt</strong>-appen<br />for å koble til
-            </div>
-          </>
-        )}
-
-        <FlowStatusDisplay step={flowStep} pin={pfnsObject?.pin ?? ''} />
+    <Box height="100%" display="flex" flexDirection="column">
+      {activeMode && (<Header onBackClicked={() => setActiveMode(null)} backgroundColor='#FFF0' />)}
+      <Box p={2} display="flex" justifyContent="center" sx={{ marginTop: "72px" }}>
+        <img src={logo} style={{ width: 100, height: 'auto' }} />
       </Box>
+
+      {!activeMode && (
+        <Box>
+          <Typography>Velg tilkoblingsmetode</Typography>
+
+          <Box sx={{
+            display: "flex",
+            marginTop: 5,
+            flexDirection: "row",
+            justifyContent: 'center',
+          }}>
+            {pfnsObject && (
+              <Button variant='outlined' onClick={() => setActiveMode('qr')}>
+                <QrCodeScannerIcon />
+              </Button>
+            )}
+            <Button variant='outlined' onClick={() => setActiveMode('manual')}>
+              <HttpIcon />
+            </Button>
+          </Box>
+        </Box>
+
+      )}
+      {activeMode === 'qr' && pfnsObject && (
+        <QRCodeAccessFlow pfnsObject={pfnsObject} setServer={setServer} />
+      )}
+      {activeMode === 'manual' && (
+        <ManualAccessFlow pin={pinCode} setServer={setServer} />
+      )}
+
     </Box>
   );
 }
 
-function FlowStatusDisplay({ step, pin }: { step: SetupFlowStep; pin: string }) {
-  switch (step) {
-    case 'waitingForScan': return <div>📷 Venter på at QR-koden blir scannet…</div>;
-    case 'identifying': return <div>🔍 Identifiserer mot server…</div>;
-    case 'polling': return <div>📲 Venter på godkjenning på telefonen…</div>;
-    case 'failed': return (
-      <div>
-        ❌ QR-koden ble ikke brukt.<br />
-        👉 PIN-kode for manuell innlogging: <strong>{pin}</strong>
-      </div>
-    );
-    case 'connected': return <div>✅ Tilkobling verifisert – fortsett på telefonen</div>;
-    default: return null;
-  }
-}

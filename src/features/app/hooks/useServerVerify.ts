@@ -22,9 +22,7 @@ export default function useServerVerification(server: ServerInfo, token: string 
 
         try {
             isReachable = await verify(server.lan);
-            requiresAuth = isReachable
-                ? await doesServerRequireAuthentication(server.lan)
-                : false;
+            requiresAuth = false;
 
             if (requiresAuth) {
                 log.warn("LAN-server krever autentisering, dette stemmer ikke med forventet oppsett");
@@ -89,6 +87,7 @@ export async function verify(url: string | null): Promise<boolean> {
 
 export async function doesServerRequireAuthentication(url: string): Promise<boolean> {
     const response = await GetIsDelegateRequired(url);
+    console.log("Does server require authentication", url, response)
     if (response === null) {
         log.warn(`Kunne ikke avgjøre om server krever autentisering: ${url}`);
         return false;

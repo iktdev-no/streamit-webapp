@@ -43,6 +43,51 @@ function createStorageHandler<T>(key: string | undefined, fallback: T) {
     };
 }
 
+function createInstanceStorage<T>(scopeKey: string, options?: { prefix?: string; fallback?: T }) {
+    const key = scopeKey ? `${options?.prefix ?? ''}_${scopeKey}` : undefined;
+    return {
+        get(): T | null {
+            
+            if (!key) {
+                console.warn("Attempted to get storage with undefined key");
+                return options?.fallback ?? null;
+            }
+
+            const raw = localStorage.getItem(key);
+            if (!raw) return options?.fallback ?? null;
+
+            try {
+                return JSON.parse(raw) as T;
+            } catch {
+                console.warn("Failed to parse localStorage value");
+                return options?.fallback ?? null;
+            }
+        },
+        set(data: T | null): void {
+            if (!key) {
+                console.warn("Attempted to set storage with undefined key");
+                return;
+            }
+
+            if (data === null) {
+                localStorage.removeItem(key);
+            } else {
+                localStorage.setItem(key, JSON.stringify(data));
+            }
+        },
+        clear(): void {
+            if (!key) {
+                console.warn("Attempted to clear storage with undefined key");
+                return;
+            }
+
+            localStorage.removeItem(key);
+        }
+    };
+}
+
+
+
 // Usage
 export const notificationStorage = createStorageHandler<NotificationStatus>(
     'notificationStatus',
@@ -53,6 +98,11 @@ export const notificationStorage = createStorageHandler<NotificationStatus>(
 export const serverStorage = createStorageHandler<ServerInfo | null>(
     'selectedServer',
     null //debugServer()
+);
+
+export const savedServerStorage = createStorageHandler<ServerInfo[]>(
+    'savedServer',
+    [] //debugServer()
 );
 
 
@@ -90,13 +140,18 @@ export function serverAccessTokenStorage(key: string | undefined) {
     };
 }
 
+export function favoriteStorage(subKey: string | undefined) {
+    const prefix = "favorites"
+    if (!subKey) {
+        console.log("subkey is missing for" + prefix)
+        return null;
+    }
+    return createInstanceStorage<number[]>(subKey, {
+        prefix: prefix,
+        fallback: []
+    });
+}
 
-
-
-export const pfnsInfoStorage = createStorageHandler<PfnsInfo | null>(
-    'pfnsInfo',
-    null
-);
 
 
 export const FavoritesStorage = {
@@ -127,3 +182,13 @@ export const FavoritesStorage = {
         return this.get().includes(id);
     }
 };
+
+
+
+export const pfnsInfoStorage = createStorageHandler<PfnsInfo | null>(
+    'pfnsInfo',
+    null
+);
+
+
+

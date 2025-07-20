@@ -16,8 +16,8 @@ export default function ProfilesRender({ profiles, onSelectProfile, onCreateProf
     const [showCreateModal, setShowCreateModal] = useState(false);
     return (
         <>
-            <Box sx={{ paddingTop: "64px", display: "flex", flexWrap: "wrap", placeContent: "center", height: "100%" }}>
-                <Grid container spacing={4}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", placeContent: "center", height: "100%" }}>
+                <Grid container spacing={4} sx={{ marginTop: 5, marginBottom: 5 }}>
                     {profiles.map((item, index) => (
                         <Grid key={index} size={6}>
                             <Box

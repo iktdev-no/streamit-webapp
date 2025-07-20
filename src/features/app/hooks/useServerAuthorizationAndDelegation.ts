@@ -7,6 +7,8 @@ interface UseAuthFlowResult {
     loading: boolean;
 }
 
+export type AuthMode = 'pin' | 'qr'
+
 export type SetupFlowStep =
     | 'idle'
     | 'waitingForScan'
@@ -17,45 +19,61 @@ export type SetupFlowStep =
 
 
 export function useServerAuthenticationFlow(
-    endpoint: string | null,
-    pfnsObject: { pin: string } | null,
-    start: boolean,
-    updateStep: (step: SetupFlowStep) => void
-): UseAuthFlowResult {
-    const [token, setToken] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+  endpoint: string | null,
+  method: AuthMode,
+  pin: string | null,
+  start: boolean,
+  updateStep: (step: SetupFlowStep) => void
+): UseAuthFlowResult & { retryPoll: () => void } {
+  const [token, setToken] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (!endpoint || !pfnsObject || !start) return;
+  const doPolling = async (currentSessionId: string) => {
+    updateStep('polling');
+    const receivedToken = await pollForPermission(endpoint!, pin!, currentSessionId, updateStep);
 
-        const runAuthFlow = async () => {
-            setLoading(true);
-            updateStep('identifying');
+    if (receivedToken) {
+      setToken(receivedToken);
+      updateStep('connected');
+    } else {
+      updateStep('failed');
+    }
+  };
 
+  useEffect(() => {
+    if (!endpoint || !pin || !start) return;
 
-            const session: RequestCreatedResponse | null = await InitMethodBasedDelegateRequest(endpoint, "qr", pfnsObject.pin);
-            if (!session?.sessionId) {
-                updateStep('failed');
-                setLoading(false);
-                return;
-            }
+    const runAuthFlow = async () => {
+      setLoading(true);
+      updateStep('identifying');
 
-            const receivedToken = await pollForPermission(endpoint, pfnsObject.pin, session.sessionId, updateStep);
-            if (receivedToken) {
-                setToken(receivedToken);
-                updateStep('connected');
-            } else {
-                updateStep('failed');
-            }
+      const session: RequestCreatedResponse = await InitMethodBasedDelegateRequest(endpoint, method, pin);
+      if (!session?.sessionId) {
+        updateStep('failed');
+        setLoading(false);
+        return;
+      }
 
-            setLoading(false);
-        };
+      setSessionId(session.sessionId);
+      await doPolling(session.sessionId);
+      setLoading(false);
+    };
 
-        runAuthFlow();
-    }, [endpoint, pfnsObject, start]);
+    runAuthFlow();
+  }, [endpoint, pin, start]);
 
-    return { token, loading };
+  const retryPoll = () => {
+    if (endpoint && pin && sessionId) {
+      doPolling(sessionId);
+    } else {
+      console.warn("Kan ikke retry – mangler data.");
+    }
+  };
+
+  return { token, loading, retryPoll };
 }
+
 
 async function pollForPermission(
     serverAddress: string,

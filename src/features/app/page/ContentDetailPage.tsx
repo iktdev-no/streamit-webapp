@@ -12,10 +12,11 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import { setMediaItem, type MediaItem } from "../store/playContentSlice";
 import { ToastContainer, toast } from "react-toastify";
-import { FavoritesStorage } from "../useStorage";
+import { favoriteStorage } from "../useStorage";
 import CoverImage from "../components/ContentCover";
-import { selectServerState, selectToken } from "../store/serverSlice";
+import { selectServerId, selectServerState, selectToken } from "../store/serverSlice";
 import { getSecureUrl } from "../utils";
+import SummaryView from "../components/SummaryView";
 
 export default function ContentDetailPage() {
     const dispatch = useDispatch();
@@ -23,11 +24,12 @@ export default function ContentDetailPage() {
     const _selectedContent = useSelector(selectedContent);
     const [isFavorited, setFavorited] = useState<boolean>(false);
     const [content, setContent] = useState<Catalog | null>(null);
-    const [summary, setSummary] = useState<Summary[]>([]);
+    const [summary, setSummary] = useState<Summary[] | null>(null);
     const [loading, setLoading] = useState(true);
     const token = useSelector(selectToken);
     const serverState = useSelector(selectServerState);
-    
+    const favorites = favoriteStorage(useSelector(selectServerId))
+
 
 
     useEffect(() => {
@@ -44,7 +46,7 @@ export default function ContentDetailPage() {
                 console.log(summaries)
             };
             fetch();
-            if (FavoritesStorage.is(_selectedContent.id)) {
+            if (favorites?.get()?.includes(_selectedContent.id)) {
                 setFavorited(true);
             }
         }
@@ -80,10 +82,12 @@ export default function ContentDetailPage() {
 
     function toggleFavorite() {
         if (!content) return;
-        if (isFavorited) {
-            FavoritesStorage.remove(content.id);
+        const stored: number[] = favorites?.get() ?? []
+        if (isFavorited) {           
+            favorites?.set(stored.filter((id) => id != content.id) ?? [])
         } else {
-            FavoritesStorage.add(content.id);
+            stored.push(content.id)
+            favorites?.set(stored)
         }
         setFavorited(!isFavorited);
 
@@ -94,7 +98,7 @@ export default function ContentDetailPage() {
             closeOnClick: true,
             pauseOnHover: false,
             draggable: false,
-            });
+        });
     }
 
     if (loading) return <CircularProgress />;
@@ -106,7 +110,7 @@ export default function ContentDetailPage() {
 
     return (
         <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
-            <Header onBackClicked={() => { navigate(-1) }} />
+            <Header onBackClicked={() => { navigate(-1) }} backgroundColor="#FFF0" />
             <Box sx={{
                 position: "fixed",
                 top: 0,
@@ -185,11 +189,13 @@ export default function ContentDetailPage() {
                             marginTop: 2,
                             display: "flex"
                         }}>
-                            <Button
-                                onClick={() => setMovieMediaItem(content as Movie)}
-                                sx={{ marginRight: 1 }} variant="contained" startIcon={<PlayArrowIcon />}>
-                                Spill av
-                            </Button>
+                            {content.type === 'Movie' && (
+                                <Button
+                                    onClick={() => setMovieMediaItem(content as Movie)}
+                                    sx={{ marginRight: 1 }} variant="contained" startIcon={<PlayArrowIcon />}>
+                                    Spill av
+                                </Button>
+                            )}
                             <IconButton sx={{
                                 color: "white",
                                 marginLeft: 1,
@@ -205,12 +211,8 @@ export default function ContentDetailPage() {
                         </Box>
                     </Box>
                     <Box sx={{ textAlign: "left", padding: "50px" }}>
-                        {summary.map((item, index) => (
-                            <Box key={index}>
-                                <Typography>{item.language}</Typography>
-                                <Typography variant="body1">{item.description}</Typography>
-                            </Box>
-                        ))}
+                        {summary && summary.length > 0 && (
+                            <SummaryView summary={summary} />)}
                     </Box>
                     {content.type === "Serie" && (
                         <EpisodeList onEpisodeSelected={setSerieMediaItem} episodes={(content as Serie).episodes} />

@@ -46,10 +46,12 @@ export default function ProfilePage({}: ProfilePageProps) {
             {loading ? (
                 <p>Laster profiler…</p>
             ) : (
-                <ProfilesRender
+                <Box sx={{ paddingTop: "64px", height: "100%" }}>
+                    <ProfilesRender
                     profiles={profiles} 
                     onSelectProfile={onSelectProfile}
                     onCreateProfile={onCreateProfile}/>
+                </Box>
             )}
         </Box>
     );

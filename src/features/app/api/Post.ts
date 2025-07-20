@@ -15,6 +15,12 @@ export async function InitMethodBasedDelegateRequest(serverAddress: string, meth
     return response.data;
 }
 
+export async function RequestNewAccessToken(): Promise<string> {
+    const deviceInfo = getWebClientDeviceInfo();
+    const response = await WebPost<string>(["auth", "new"], deviceInfo);
+    return response.data
+}
+
 export async function UpdateOrCreateProfile(data: Profile): Promise<boolean> {
     const response = await WebPost<string>(["user"], data)
     return response.status === 200

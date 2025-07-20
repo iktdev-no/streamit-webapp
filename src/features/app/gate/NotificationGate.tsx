@@ -1,9 +1,9 @@
 // components/NotificationGate.tsx
-import logo from '../../assets/logo.svg';
+import logo from '../../../assets/logo.svg';
 import { useEffect } from "react";
-import type { NotificationStatus } from "../../types/notification";
-import { useNotificationPermission } from "./hooks/useNotificationPermission";
-import { notificationStorage } from "./useStorage";
+import type { NotificationStatus } from "../../../types/notification";
+import { useNotificationPermission } from "../hooks/useNotificationPermission";
+import { notificationStorage } from "../useStorage";
 import { Box, Button, Typography } from "@mui/material";
 
 interface NotificationGateProps {

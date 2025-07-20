@@ -99,7 +99,7 @@ export async function WebGet<T>(baseUrlOrPath: string | string[], pathMaybe?: st
             headers
         });
     } catch (err) {
-        const message = `WebGet: Failed to get response from ${absoluteUrl}: ${err}`
+        const message = `WebGet: Failed to get response from ${absoluteUrl} : ${err}`
         console.error(message)
         throw new Error(message)
     }

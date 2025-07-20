@@ -42,6 +42,10 @@ export default function CoverImage({ src, alt, className, style, sx, draggable, 
                     sm: 200,
                     md: 240,
                 },
+                userSelect: 'none', // hindrer tekstmarkering
+                WebkitUserSelect: 'none', // Safari-støtte
+                MozUserSelect: 'none', // Firefox-støtte
+                msUserSelect: 'none', // IE-støtte
                 ...sx
             }}
         />

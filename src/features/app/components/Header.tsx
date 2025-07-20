@@ -1,15 +1,23 @@
 // src/components/Header.tsx
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { showServerBanner } from '../store/appSlice';
 
 export interface HeaderProps {
   title?: string;
+  backgroundColor?: string;
   onBackClicked?: () => void;
 }
 
-export default function Header({ title, onBackClicked }: HeaderProps) {
+export default function Header({ title, onBackClicked, backgroundColor }: HeaderProps) {
+  const isServerBannerVisible = useSelector(showServerBanner);
+
   return (
-    <AppBar position="fixed" color="info" elevation={0} sx={{ top: "36px"}}>
+    <AppBar position="fixed" color="info" elevation={0} sx={{ 
+        top: (isServerBannerVisible) ? "36px" : "0px",
+        backgroundColor: (backgroundColor) ? backgroundColor : 'primary.main'
+      }}>
       <Toolbar sx={{ minHeight: 64, display: 'flex', justifyContent: 'space-between' }}>
         {onBackClicked ? (
           <IconButton

@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import React, { useEffect, useState } from 'react';
 import type { ServerState } from './store/serverSlice';
+import { iso6393 } from 'iso-639-3';
 
 
 /** Intern funksjon for å hente funksjonsnavn fra stack */
@@ -64,6 +65,11 @@ export function getSecureUrl(mediaSrc: string, serverState: ServerState | null, 
     }
 }
 
+
+export function getLanguageNameFromISO3(iso: string): string {
+          const language = iso6393.find((lang) => lang.iso6393 === iso);
+          return language ? language.name : 'Unknown Language';
+}
 
 interface CodecSupport {
   [codecName: string]: string;

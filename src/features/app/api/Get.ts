@@ -1,5 +1,6 @@
 import { type Summary, type Catalog, type Episode, type Movie, type Serie, type Subtitle } from "../../../types/content";
 import type { Profile, RemoteImage } from "../../../types/profile";
+import type { ServerInfo } from "../../../types/serverInfo";
 import type { Heartbeat } from "../../../types/streamitTypes";
 import { getAbsoluteUrl, WebGet } from "./apiClient";
 
@@ -11,6 +12,11 @@ export async function GetHeartbeat(serverAddress: string): Promise<Heartbeat | n
 
 export async function GetIsDelegateRequired(serverAddress: string): Promise<boolean> {
     const response = await WebGet<boolean>(serverAddress, ["auth", "delegate", "required"]);
+    return response.data;
+}
+
+export async function GetServerInfo(serverAddress: string): Promise<ServerInfo | null> {
+    const response = await WebGet<ServerInfo | null>(serverAddress, ["info", "server"]);
     return response.data;
 }
 
@@ -33,6 +39,9 @@ export async function GetProfileImages(): Promise<RemoteImage[]> {
 }
 
 export async function GetByIds(ids: number[]): Promise<Catalog[]> {
+  if (ids.length === 0) {
+    return [];
+  }
   const idsToLookup = ids.map(id => id.toString()).join(",");
   const response = await WebGet<Catalog[]>(["catalog", "get", idsToLookup]);
   return response.data

@@ -9,3 +9,8 @@ export interface FcmPayload {
     [key: string]: string;
   };
 }
+
+export interface PfnsObject {
+  pfnsReceiverId: string,
+  pin: string
+}
