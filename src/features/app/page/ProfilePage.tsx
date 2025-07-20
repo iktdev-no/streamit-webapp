@@ -7,9 +7,15 @@ import Grid from '@mui/material/Grid';
 import { Box, Typography } from "@mui/material";
 import { Image } from "@mui/icons-material";
 import { setProfile } from "../store/appSlice";
+import { useNavigate } from "react-router-dom";
+import ProfilesRender from "../components/ProfilesRender";
+import { UpdateOrCreateProfile } from "../api/Post";
 
+interface ProfilePageProps {
+}
 
-export default function ProfilePage({ canGoBack = true }: { canGoBack: boolean }) {
+export default function ProfilePage({}: ProfilePageProps) {
+    const navigate = useNavigate();
     const [profiles, setProfiles] = useState<Profile[]>([]);
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
@@ -17,60 +23,33 @@ export default function ProfilePage({ canGoBack = true }: { canGoBack: boolean }
         Profiles().then(setProfiles).finally(() => setLoading(false))
     }, [])
 
-    function onSelectProfile(profile: Profile) {
+    const onSelectProfile = (profile: Profile) => {
         dispatch(setProfile(profile))
+            navigate("/");
+    }
+
+    const onCreateProfile = (profile: Profile) => {
+        UpdateOrCreateProfile(profile).then((success) => {
+            if (success) {
+                setLoading(true);
+                Profiles().then(setProfiles).finally(() => setLoading(false));
+            }
+        })
     }
 
     return (
         <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
             <Header
                 title="Velg profil"
-                onBackClicked={() => { console.log("Potet") }}
+                onBackClicked={() => { navigate(-1); }}
             />
             {loading ? (
                 <p>Laster profiler…</p>
             ) : (
-                <Box sx={{ paddingTop: "64px", display: "flex", flexWrap: "wrap", placeContent: "center", height: "100%" }}>
-                    <Grid container spacing={4}>
-                        {profiles.map((item, index) => (
-                            <Grid key={index} size={6}>
-                                <Box 
-                                    onClick={() => onSelectProfile(item)}
-                                    sx={{
-                                        display: "flex",
-                                        width: 150,
-                                        margin: "auto",
-                                        flexDirection: "column",
-                                        alignItems: "center",
-                                    cursor: "pointer",
-
-                                    }}>
-                                    <img height={150} width={150} src={item.imageSrc!} />
-                                    <Typography variant="h5">{item.name}</Typography>
-                                </Box>
-                            </Grid>
-                        ))}
-                        <Grid size={6}>
-                            <Box
-                                onClick={() => console.log("Legg til ny profil")}
-                                sx={{
-                                    height: 150,
-                                    width: 150,
-                                    border: "2px dashed #aaa",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    cursor: "pointer",
-                                    borderRadius: 2,
-                                    margin: "auto"
-                                }}
-                            >
-                                <Typography color="text.secondary">+ Ny profil</Typography>
-                            </Box>
-                        </Grid>
-                    </Grid>
-
-                </Box>
+                <ProfilesRender
+                    profiles={profiles} 
+                    onSelectProfile={onSelectProfile}
+                    onCreateProfile={onCreateProfile}/>
             )}
         </Box>
     );

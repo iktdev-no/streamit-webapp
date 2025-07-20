@@ -5,3 +5,8 @@ export interface Profile {
     image: string,
     imageSrc: string | null
 }
+
+export interface RemoteImage {
+    image: string,
+    imageSrc: string | null
+}

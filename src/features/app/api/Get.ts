@@ -1,5 +1,5 @@
 import { type Summary, type Catalog, type Episode, type Movie, type Serie, type Subtitle } from "../../../types/content";
-import type { Profile } from "../../../types/profile";
+import type { Profile, RemoteImage } from "../../../types/profile";
 import type { Heartbeat } from "../../../types/streamitTypes";
 import { getAbsoluteUrl, WebGet } from "./apiClient";
 
@@ -21,6 +21,15 @@ export async function Profiles(): Promise<Profile[]> {
         ...item,
         imageSrc: getAbsoluteUrl(response.url, ["assets", "profile-image", item.image])
     }))
+}
+
+export async function GetProfileImages(): Promise<RemoteImage[]> { 
+  const response = await WebGet<string[]>(["assets", "profile-image"]);
+  console.log(response)
+  return response.data.map(item => ({
+    image: item,
+    imageSrc: getAbsoluteUrl(response.url, ["assets", "profile-image", item])
+  }))
 }
 
 export async function GetByIds(ids: number[]): Promise<Catalog[]> {
@@ -97,6 +106,8 @@ export async function GetSummary(id: number): Promise<Summary[]> {
   const response = await WebGet<Summary[]>(["summary", id.toString()])
   return response.data;
 }
+
+
 
 
 

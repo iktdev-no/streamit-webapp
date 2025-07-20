@@ -92,10 +92,17 @@ export async function WebGet<T>(baseUrlOrPath: string | string[], pathMaybe?: st
 
     const absoluteUrl = getAbsoluteUrl(baseUrl, ["api", ...path]);
 
-    const res = await fetch(absoluteUrl, {
-        method: 'GET',
-        headers
-    });
+    let res: Response;
+    try {
+        res = await fetch(absoluteUrl, {
+            method: 'GET',
+            headers
+        });
+    } catch (err) {
+        const message = `WebGet: Failed to get response from ${absoluteUrl}: ${err}`
+        console.error(message)
+        throw new Error(message)
+    }
 
     if (!res.ok) {
         throw new Error(`WebGet: ${res.status} ${res.statusText}`);
@@ -155,14 +162,26 @@ export async function WebPost<T>(baseUrlOrPath: string | string[], pathOrBody: s
         throw new Error(`WebPost: ${res.status} ${res.statusText}`);
     }
 
+    const contentType = res.headers.get("Content-Type");
+
     try {
-        const response = await res.json() as T;
-        return {
-            url: baseUrl,
-            data: response,
-        };
+        if (contentType && contentType.includes("application/json")) {
+            const response = await res.json() as T;
+            return {
+                status: res.status,
+                url: baseUrl,
+                data: response,
+            };
+        } else {
+            const responseText = await res.text(); // alternativt res.blob() for binære data
+            return {
+                status: res.status,
+                url: baseUrl,
+                data: responseText as unknown as T,
+            };
+        }
     } catch (error) {
-        console.warn(absoluteUrl, res.body);
-        throw new Error(`WebPost: Failed to parse JSON response from ${absoluteUrl}: ${res} ${error}`);
+        console.warn(`WebPost: Failed to parse response from ${absoluteUrl}`, error);
+        throw new Error(`WebPost: Error while reading response from ${absoluteUrl}: ${error}`);
     }
 }

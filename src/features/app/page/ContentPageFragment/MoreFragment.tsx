@@ -12,8 +12,10 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import SubtitlesIcon from '@mui/icons-material/Subtitles';
 import StreamIcon from '@mui/icons-material/Stream';
+import { useNavigate } from "react-router-dom";
 
 export default function MoreFragment() {
+    const navigate = useNavigate();
     const profile = useSelector(selectProfile);
     const [remoteVersion, setRemoteVersion] = useState<string | null>(null);
     const [isInstalled, setIsInstalled] = useState(false);
@@ -41,14 +43,18 @@ export default function MoreFragment() {
             icon: <PeopleAltIcon />,
             text: "Bytt profil",
             variant: "default",
-            onClick: () => { }
+            onClick: () => {
+                navigate("/changeProfile");
+            }
         },
         {
             id: "settings",
             icon: <ManageAccountsIcon />,
             text: "Rediger profil",
             variant: "default",
-            onClick: () => { }
+            onClick: () => { 
+                navigate("/editProfile");
+            }
         }
     ];
 
@@ -65,7 +71,7 @@ export default function MoreFragment() {
             icon: <StreamIcon />,
             text: "Strømmetjener",
             variant: "default",
-            onClick: () => { }
+            onClick: () => { navigate("/server"); }
         }
     ];
 

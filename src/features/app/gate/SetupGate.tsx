@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, CircularProgress, useTheme } from "@mui/material";
 import { QRCodeCanvas } from "qrcode.react";
-import { usePfns } from "./hooks/usePfns";
-import { generateRandomPin } from "./utils";
-import { configureServerKey, useFcmListener } from "./hooks/useFcmListener";
-import { serverAccessTokenStorage } from "./useStorage";
-import type { ServerInfo } from "../../types/serverInfo";
-import type { FcmPayload } from "../../types/streamitTypes";
-import { useServerAuthenticationFlow, type SetupFlowStep } from "./hooks/useServerAuthorizationAndDelegation";
-import useServerVerification from "./hooks/useServerVerify";
+import { usePfns } from "../hooks/usePfns";
+import { generateRandomPin } from "../utils";
+import { configureServerKey, useFcmListener } from "../hooks/useFcmListener";
+import { serverAccessTokenStorage } from "../useStorage";
+import type { ServerInfo } from "../../../types/serverInfo";
+import type { FcmPayload } from "../../../types/streamitTypes";
+import { useServerAuthenticationFlow, type SetupFlowStep } from "../hooks/useServerAuthorizationAndDelegation";
+import useServerVerification from "../hooks/useServerVerify";
 
 interface SetupGateProps {
   setServer: (server: ServerInfo, token: string | null) => void;

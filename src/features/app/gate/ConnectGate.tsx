@@ -1,11 +1,11 @@
 import { useEffect, useState, type JSX } from 'react';
 import { useDispatch } from 'react-redux';
-import { selectServer, setToken, setActiveUrl } from './store/serverSlice';
-import useServer from './hooks/useServerEndpoint';
-import { serverAccessTokenStorage, serverStorage } from './useStorage';
-import GateAuthenticateUsingQR from './page/access/FastConnectUsingQR';
+import { selectServer, setToken, setActiveUrl } from '../store/serverSlice';
+import useServer from '../hooks/useServerEndpoint';
+import { serverAccessTokenStorage, serverStorage } from '../useStorage';
+import GateAuthenticateUsingQR from '../page/access/FastConnectUsingQR';
 import { Box } from '@mui/material';
-import FastConnectUsingQR from './page/access/FastConnectUsingQR';
+import FastConnectUsingQR from '../page/access/FastConnectUsingQR';
 
 interface ConnectGateProps {
   onReady: () => void;
