@@ -52,7 +52,9 @@ export function NotificationGate({ onResult }: NotificationGateProps) {
                 alignItems="center"
             >
                 <Box
-                    bgcolor="#f5f5f5"
+                    sx={{
+                        backgroundColor: 'primary.dark'
+                    }}
                     p={4}
                     borderRadius={4}
                     boxShadow={3}

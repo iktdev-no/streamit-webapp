@@ -8,9 +8,10 @@ export interface HeaderProps {
   title?: string;
   backgroundColor?: string;
   onBackClicked?: () => void;
+  rightElement?: React.ReactNode
 }
 
-export default function Header({ title, onBackClicked, backgroundColor }: HeaderProps) {
+export default function Header({ title, onBackClicked, backgroundColor, rightElement }: HeaderProps) {
   const isServerBannerVisible = useSelector(showServerBanner);
 
   return (
@@ -39,7 +40,7 @@ export default function Header({ title, onBackClicked, backgroundColor }: Header
             component="div"
             sx={{
               flexGrow: 1,
-              textAlign: 'center',
+              textAlign: 'left',
               fontWeight: 'bold',
               fontFamily: 'system-ui, Avenir, Helvetica, Arial, sans-serif',
               color: 'white',
@@ -49,7 +50,7 @@ export default function Header({ title, onBackClicked, backgroundColor }: Header
           </Typography>
         )}
 
-        <div style={{ width: 48 }} /> {/* tom plass for høyre side */}
+        {rightElement}
       </Toolbar>
     </AppBar>
   );

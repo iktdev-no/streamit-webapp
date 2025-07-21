@@ -40,7 +40,8 @@ export default function HomeFragment({ onContentSelected }: HomeFragmentProps) {
     return (<>
     <HorizontalCatalog items={newlyAdded} title="Nytt innhold" onItemClick={onContentSelected} />
     <HorizontalCatalog items={newlyUpdated} title="Nye episoder" onItemClick={onContentSelected} />
-    <HorizontalCatalog items={favorited} title="Favoritter" onItemClick={onContentSelected} />
-    
+    {favorites.length > 0 && (
+        <HorizontalCatalog items={favorited} title="Favoritter" onItemClick={onContentSelected} />
+    )}
     </>)
 }

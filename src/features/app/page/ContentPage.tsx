@@ -12,9 +12,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setSelectedContent } from "../store/appSlice";
 import { useSessionState } from "../sessionUtil";
+import Header from "../components/Header";
+import HeaderSearchField from "../components/HeaderSearchField";
+import ContentGridSearchFragment from "./ContentPageFragment/ContentGridSearchFragment";
 
 export default function ContentPage() {
-    const [menuItem, setMenuItem] = useSessionState<number>("selectedMenuItem" ,0); // 0: Home, 1: Movies, 2: Series, 3: More
+    const [query, setQuery] = useSessionState<string>("searchQuery", "");
+    const [menuItem, setMenuItem] = useSessionState<number>("selectedMenuItem", 0); // 0: Home, 1: Movies, 2: Series, 3: More
     const displatch = useDispatch();
     const navigate = useNavigate();
 
@@ -26,11 +30,20 @@ export default function ContentPage() {
 
     return (
         <Box sx={{ height: "100%" }}>
-            <Box sx={{ paddingBottom: 10 }}>
-                {menuItem === 0 && <HomeFragment onContentSelected={onContentSelected} />}
-                {menuItem === 1 && <ContentGridFragment onContentSelected={onContentSelected} type="Movie" />}
-                {menuItem === 2 && <ContentGridFragment onContentSelected={onContentSelected} type="Serie" />}
-                {menuItem === 3 && <MoreFragment />}
+            <Header backgroundColor="#000000ba" rightElement={
+                (menuItem !== 3) && (<HeaderSearchField value={query} onChange={setQuery} />)
+            } />
+            <Box sx={{ paddingBottom: 10, paddingTop: "64px" }}>
+                {(query.length > 0 && menuItem !== 3) ? (
+                    <ContentGridSearchFragment query={query} onContentSelected={onContentSelected} />
+                ) : (
+                    <>
+                        {menuItem === 0 && <HomeFragment onContentSelected={onContentSelected} />}
+                        {menuItem === 1 && <ContentGridFragment onContentSelected={onContentSelected} type="Movie" />}
+                        {menuItem === 2 && <ContentGridFragment onContentSelected={onContentSelected} type="Serie" />}
+                        {menuItem === 3 && <MoreFragment />}
+                    </>
+                )}
             </Box>
 
 

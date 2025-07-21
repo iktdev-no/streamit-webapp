@@ -89,6 +89,15 @@ export async function SerieCatalog(): Promise<Catalog[]> {
     }})
 }
 
+export async function SearchCatalog(keyword: string): Promise<Catalog[]> {
+  const response = await WebGet<Catalog[]>(["search", keyword]);
+    return response.data
+    .map(item => { return {
+      ...item,
+      coverSrc: setCoverSrc(response.url, item)
+    }})
+}
+
 export async function GetSerie(catalog: Catalog): Promise<Serie> {
   const responseTest = await WebGet<string>(["catalog", "serie", catalog.collection]);
   console.log("GetSerie", responseTest.data);
