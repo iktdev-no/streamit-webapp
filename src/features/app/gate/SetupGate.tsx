@@ -47,12 +47,28 @@ export default function SetupGate({ setServer }: SetupGateProps) {
             justifyContent: 'center',
           }}>
             {pfnsObject && (
-              <Button variant='outlined' onClick={() => setActiveMode('qr')}>
-                <QrCodeScannerIcon />
+              <Button sx={{
+                height: 200,
+                width: 200,
+                 margin: 2
+              }} variant='outlined' onClick={() => setActiveMode('qr')}>
+                <QrCodeScannerIcon sx={{ 
+                  height: 100, 
+                  width: 100,
+                  color: "secondary.dark"
+                }} />
               </Button>
             )}
-            <Button variant='outlined' onClick={() => setActiveMode('manual')}>
-              <HttpIcon />
+            <Button sx={{
+                height: 200,
+                width: 200,
+                margin: 2
+            }} variant='outlined' onClick={() => setActiveMode('manual')}>
+              <HttpIcon  sx={{ 
+                  height: 100, 
+                  width: 100,
+                  color: "secondary.dark"
+                }} />
             </Button>
           </Box>
         </Box>
