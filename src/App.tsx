@@ -1,7 +1,5 @@
 import { useEffect, useState, type JSX } from 'react'
 import logo from './assets/logo.svg';
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { ConnectGate } from './features/app/gate/ConnectGate'
 import { useSelector } from 'react-redux';

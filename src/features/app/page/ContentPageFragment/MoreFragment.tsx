@@ -13,12 +13,15 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import SubtitlesIcon from '@mui/icons-material/Subtitles';
 import StreamIcon from '@mui/icons-material/Stream';
 import { useNavigate } from "react-router-dom";
+import { usePwaUpdate } from "../../hooks/usePwaUpdate";
 
 export default function MoreFragment() {
     const navigate = useNavigate();
     const profile = useSelector(selectProfile);
     const [remoteVersion, setRemoteVersion] = useState<string | null>(null);
     const [isInstalled, setIsInstalled] = useState(false);
+    const { needRefresh, updateServiceWorker } = usePwaUpdate();
+
 
     const version = import.meta.env.VITE_APP_VERSION;
     const environment = import.meta.env.VITE_ENVIRONMENT;
@@ -35,7 +38,12 @@ export default function MoreFragment() {
             .catch(() => setRemoteVersion("Ukjent"));
     }, []);
 
-    const isOutdated = true // remoteVersion && remoteVersion !== version;
+    const isOutdated =
+        remoteVersion !== null &&
+        version !== null &&
+        remoteVersion !== version &&
+        needRefresh; // fra usePwaUpdate
+
 
     const userProfile: InfoItem[] = [
         {
@@ -52,7 +60,7 @@ export default function MoreFragment() {
             icon: <ManageAccountsIcon />,
             text: "Rediger profil",
             variant: "default",
-            onClick: () => { 
+            onClick: () => {
                 navigate("/editProfile");
             }
         }
@@ -93,7 +101,7 @@ export default function MoreFragment() {
             icon: <CloudDownloadIcon />,
             text: `Ny versjon tilgjengelig: ${remoteVersion}`,
             variant: "update",
-            onClick: () => { }
+            onClick: () => { updateServiceWorker(true) }
         } as InfoItem] : []),
         {
             id: "installed",

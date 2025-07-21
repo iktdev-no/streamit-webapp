@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import fs from 'node:fs';
 import path from 'node:path';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
@@ -20,6 +21,30 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
+      VitePWA({
+        registerType: 'prompt',
+        includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+        manifest: {
+          name: 'Streamit web app',
+          short_name: 'Streamit',
+          start_url: '/',
+          display: 'standalone',
+          background_color: '#000000',
+          theme_color: '#FF0000',
+          icons: [
+            {
+              src: 'pwa-icon-192.png',
+              sizes: '192x192',
+              type: 'image/png',
+            },
+            {
+              src: 'pwa-icon-512.png',
+              sizes: '512x512',
+              type: 'image/png',
+            },
+          ],
+        },
+      }),
       {
         name: 'generate-firebase-config-js',
         buildStart() {
