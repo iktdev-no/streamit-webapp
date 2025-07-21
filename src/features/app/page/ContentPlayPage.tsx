@@ -7,8 +7,10 @@ import { Box } from "@mui/material";
 import { getLanguageNameFromISO3, getSecureUrl, useVideoDecoderSupport } from "../utils";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import ShakaPlayerComponent from "../components/ShakaPlayerComponent";
 
-interface TrackConfig {
+export interface TrackConfig {
     kind: "subtitles";
     src: string;
     srcLang: string;
@@ -39,6 +41,8 @@ export default function ContentPlayPage() {
     const serverState = useSelector(selectServerState);
     const codecs = useVideoDecoderSupport()
 
+    const [duration, setDuration] = useState(-1)
+
     console.log(codecs);
 
 
@@ -65,6 +69,18 @@ export default function ContentPlayPage() {
                 backgroundColor: "black"
 
             }}>
+                <ShakaPlayerComponent 
+                    videoUrl={videoUrl} 
+                    subtitles={subtitles}                    
+                />
+
+            </Box>
+        </Box>
+    );
+
+}
+
+/*
                 <ReactPlayer controls crossOrigin="anonymous"
                     style={{
                         width: "100%",
@@ -76,8 +92,4 @@ export default function ContentPlayPage() {
                         <track key={index} src={subtitle.src} kind="subtitles" srcLang={subtitle.srcLang} label={subtitle.label} />
                     ))}
                 </ReactPlayer>
-            </Box>
-        </Box>
-    );
-
-}
+*/

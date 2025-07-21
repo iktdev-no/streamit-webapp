@@ -28,7 +28,9 @@ export default function ContentGridSearchFragment({ query, onContentSelected }: 
 
     return (
         <div style={{ padding: '1rem' }}>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{
+                justifyContent: 'center'
+            }}>
                 {content.map(item => (
                     <Grid key={item.id}>
                         <ContentCover 

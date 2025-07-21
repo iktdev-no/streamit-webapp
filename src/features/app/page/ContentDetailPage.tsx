@@ -49,6 +49,8 @@ export default function ContentDetailPage() {
             if (favorites?.get()?.includes(_selectedContent.id)) {
                 setFavorited(true);
             }
+        } else {
+            navigate(-1);
         }
 
     }, [_selectedContent]);
@@ -104,9 +106,11 @@ export default function ContentDetailPage() {
     if (loading) return <CircularProgress />;
 
     if (!content) {
-        navigate(-1);
-        return (<>Go back</>)
+        return (
+            <>Go back</>
+        )
     }
+
 
     return (
         <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
