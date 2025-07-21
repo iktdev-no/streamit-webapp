@@ -1,4 +1,4 @@
-import { Box, type SxProps, type Theme } from "@mui/material";
+import { Box, Typography, type SxProps, type Theme } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectToken, selectServerState } from "../store/serverSlice";
@@ -11,6 +11,7 @@ interface Props {
     style?: React.CSSProperties;
     sx?: SxProps<Theme>;
     draggable?: boolean;
+    recent?: boolean;
     onClick?: () => void;
 }
 
@@ -21,6 +22,7 @@ export default function CoverImage({
     style,
     sx,
     draggable,
+    recent,
     onClick
 }: Props) {
     const token = useSelector(selectToken);
@@ -40,8 +42,9 @@ export default function CoverImage({
             className={className}
             style={style}
             sx={{
+                position: 'relative', // 👈 viktig!
                 borderRadius: "8px",
-                zIndex: 1,
+                zIndex: 0,
                 userSelect: "none",
                 WebkitUserSelect: "none",
                 MozUserSelect: "none",
@@ -50,10 +53,29 @@ export default function CoverImage({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                overflow: "hidden", // hvis overlay stikker ut
                 ...defaultSize,
                 ...sx
             }}
         >
+            {/* 🔮 Overlay-element */}
+            {recent && (
+                <Box
+                    sx={{
+                        position: "absolute",
+                        display: "flex",
+                        top: 25,
+                        left: 0,
+                        backgroundColor: "magenta",
+                        zIndex: 1
+                    }}
+                >
+                    <Typography variant="subtitle2" sx={{ margin: 0, paddingLeft: 0.5, paddingRight: 0.5, color: 'text.primary', backgroundColor: 'secondary.main' }}>Ny</Typography>
+                    <Typography variant="subtitle2" sx={{ margin: 0, paddingLeft: 0.5, paddingRight: 0.5, color: 'secondary.main', backgroundColor: 'text.primary' }}>Episode</Typography>
+                </Box>
+            )}
+
+            {/* 📷 Bildet */}
             {!imageError && url ? (
                 <Box
                     component="img"
@@ -65,8 +87,7 @@ export default function CoverImage({
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
-                        borderRadius: "inherit",
-
+                        borderRadius: "inherit"
                     }}
                 />
             ) : (
@@ -75,15 +96,15 @@ export default function CoverImage({
                         color: 'text.primary',
                         fontSize: "0.85rem",
                         textAlign: "center",
-                        px: 1, // gir litt padding i bredden
-                        wordBreak: "break-word", // tvinger lange ord til å brytes
-                        overflowWrap: "break-word" // ekstra støtte
+                        px: 1,
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word"
                     }}
                 >
                     {alt ?? "Ugyldig bilde"}
                 </Box>
-
             )}
         </Box>
+
     );
 }

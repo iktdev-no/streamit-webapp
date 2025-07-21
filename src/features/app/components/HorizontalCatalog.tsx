@@ -55,6 +55,8 @@ export default function HorizontalCatalog({ title, items, onItemClick }: Horizon
         scrollRef.current?.scrollBy({ left: distance, behavior: 'smooth' });
     };
 
+    const offset = -3;
+    const hzZindex = 3;
 
     return (
         <Box className="scroller-container" sx={{
@@ -68,7 +70,7 @@ export default function HorizontalCatalog({ title, items, onItemClick }: Horizon
                     onClick={() => scrollBy(-300)}
                     sx={{
                         position: 'absolute',
-                        bottom: 3, // 👈 flytt ned
+                        bottom: offset, // 👈 flytt ned
                         left: 0,
                         height: {
                             xs: 150,
@@ -80,7 +82,7 @@ export default function HorizontalCatalog({ title, items, onItemClick }: Horizon
                         transition: 'opacity 0.3s ease',
                         backgroundColor: '#080808ff',
                         borderRadius: '8px',
-                        zIndex: 1,
+                        zIndex: hzZindex,
                         '.scroller-container:hover &': {
                             opacity: 0.5,
                             pointerEvents: 'auto', // 🟢 aktiver interaksjon ved hover
@@ -122,6 +124,7 @@ export default function HorizontalCatalog({ title, items, onItemClick }: Horizon
                             alt={item.title}
                             draggable={false}
                             onClick={() => onItemClick?.(item)}
+                            recent={item.recent}
                         />
                     </Box>
                 ))}
@@ -134,7 +137,7 @@ export default function HorizontalCatalog({ title, items, onItemClick }: Horizon
                     sx={{
                         position: 'absolute',
                         right: 0,
-                        bottom: 3, // 👈 flytt ned
+                        bottom: offset, // 👈 flytt ned
                         height: {
                             xs: 150,
                             sm: 200,
@@ -144,7 +147,7 @@ export default function HorizontalCatalog({ title, items, onItemClick }: Horizon
                         opacity: 0,
                         transition: 'opacity 0.3s ease',
                         backgroundColor: '#080808ff',
-                        zIndex: 1,
+                        zIndex: hzZindex,
                         borderRadius: '8px',
                         '.scroller-container:hover &': {
                             opacity: 0.5,
