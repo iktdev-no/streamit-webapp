@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { type Summary, type Catalog, type Serie, type Episode, type Movie } from "../../../types/content"
-import { GetMovie, MovieCatalog, GetSerie, SerieCatalog, GetSummary } from "../api/Get";
+import { GetMovie, GetSerie, GetSummary } from "../api/Get";
 import { Box, Button, CircularProgress, IconButton, Typography } from "@mui/material";
 import { selectedContent } from "../store/appSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, type data } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import EpisodeList from "../components/EpisodeList";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -37,13 +37,11 @@ export default function ContentDetailPage() {
         if (_selectedContent) {
             const fetch = async () => {
                 const item = _selectedContent.type === 'Movie' ? await GetMovie(_selectedContent) : await GetSerie(_selectedContent);
-                console.log("Fetched content:", item);
                 setContent(item);
                 setLoading(false);
                 console.log(item);
                 const summaries = await GetSummary(_selectedContent.id);
                 setSummary(summaries)
-                console.log(summaries)
             };
             fetch();
             if (favorites?.get()?.includes(_selectedContent.id)) {

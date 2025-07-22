@@ -1,3 +1,4 @@
+import type { MediaItem } from "../features/app/store/playContentSlice";
 
 
 export const ContentType = {
@@ -7,6 +8,9 @@ export const ContentType = {
 
 export type ContentType = (typeof ContentType)[keyof typeof ContentType];
 
+export interface ResumeMedia extends MediaItem {
+    title: string,
+}
 
 export interface Catalog {
     id: number,

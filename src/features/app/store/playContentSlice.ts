@@ -3,6 +3,8 @@ import type { Catalog, Subtitle } from "../../../types/content";
 import type { RootState } from '../store'
 
 export interface MediaItem {
+    progress?: number,
+    duration?: number,
     video: string
     videoSrc: string,
     subtitles: Subtitle[]

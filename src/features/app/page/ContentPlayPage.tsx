@@ -1,14 +1,13 @@
 import { useSelector } from "react-redux";
-import { selectMediaItem } from "../store/playContentSlice";
-import ReactPlayer from 'react-player'
-import { selectServerState, selectToken, type ServerState } from "../store/serverSlice";
-import type { Subtitle } from "../../../types/content";
+import { selectMediaItem, type MediaItem } from "../store/playContentSlice";
+import { selectServerId, selectServerState, selectToken, type ServerState } from "../store/serverSlice";
+import type { Episode, Movie, ResumeMedia, Serie, Subtitle } from "../../../types/content";
 import { Box } from "@mui/material";
 import { getLanguageNameFromISO3, getSecureUrl, useVideoDecoderSupport } from "../utils";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import ShakaPlayerComponent from "../components/ShakaPlayerComponent";
+import { resumeStorage } from "../useStorage";
 
 export interface TrackConfig {
     kind: "subtitles";
@@ -34,18 +33,68 @@ export function buildTracks(subtitles: Subtitle[]): TrackConfig[] {
         });
 }
 
+function getEpisodeOnSerie(mediaItem: MediaItem): Episode | null {
+    const catalog = mediaItem.catalog;
+    if (catalog.type === 'Serie') {
+        const episode = (catalog as Serie).episodes.find((value, i) => value.video === mediaItem.video);
+        if (episode) {
+            return episode;
+        }
+    }
+    return null;
+}
+
+function generateTitle(mediaItem: MediaItem): string {
+    const catalog = mediaItem.catalog;
+    if (catalog.type === 'Serie') {
+        const episode = getEpisodeOnSerie(mediaItem)
+        if (episode) {
+            return `S${episode.season} · E${episode.episode} - ${episode.title ?? "Episode"}`;
+        }
+    }
+
+    return catalog.title ?? "Film uten tittel";
+}
+
+function getResumeProgress(mediaItem: MediaItem | ResumeMedia): number | undefined {
+    if (typeof mediaItem === "object" && "progress" in mediaItem && "duration" in mediaItem) {
+        const progress = mediaItem.progress;
+        if (progress) {
+            return progress;
+        }
+    }
+    return undefined;
+}
+
 export default function ContentPlayPage() {
     const navigate = useNavigate();
     const mediaItem = useSelector(selectMediaItem);
     const token = useSelector(selectToken);
     const serverState = useSelector(selectServerState);
+    const serverId = useSelector(selectServerId);
     const codecs = useVideoDecoderSupport()
 
-    const [duration, setDuration] = useState(-1)
+    if (!mediaItem) {
+        navigate(-2);
+        return (<p>No media item found</p>)
+    }
 
-    console.log(codecs);
+    const title = generateTitle(mediaItem);
+    
 
+    //console.log(codecs);
 
+    const onSaveProgress = (incomingProgress: number, incomingDuration: number) => {
+        const media: ResumeMedia = {
+            title: generateTitle(mediaItem),
+            ...mediaItem,
+            progress: incomingProgress,
+            duration: incomingDuration,
+        }
+        console.log("Saving progress", media)
+
+        resumeStorage(serverId)?.set(media)
+    }
 
     const videoUrl = getSecureUrl(mediaItem!.videoSrc!, serverState, token)
     const subtitles = buildTracks(mediaItem?.subtitles ?? []).map((item, index) => {
@@ -55,11 +104,13 @@ export default function ContentPlayPage() {
         }
     })
 
+    const resumeProgress = getResumeProgress(mediaItem);
+
 
     return (
         <Box sx={{ height: "100%", width: "100%" }}>
-            <Header title={mediaItem?.catalog.title ?? "No content.."} 
-                onBackClicked={() => navigate(-1)} backgroundColor="#FFF0"/>
+            <Header title={`${mediaItem.catalog.title}: ${title}`}
+                onBackClicked={() => navigate(-1)} backgroundColor="#FFF0" />
             <Box sx={{
                 height: "100%",
                 width: "100%",
@@ -69,9 +120,11 @@ export default function ContentPlayPage() {
                 backgroundColor: "black"
 
             }}>
-                <ShakaPlayerComponent 
-                    videoUrl={videoUrl} 
-                    subtitles={subtitles}                    
+                <ShakaPlayerComponent
+                    progress={resumeProgress}
+                    videoUrl={videoUrl}
+                    subtitles={subtitles}
+                    onSaveProgress={onSaveProgress}
                 />
 
             </Box>
@@ -79,17 +132,3 @@ export default function ContentPlayPage() {
     );
 
 }
-
-/*
-                <ReactPlayer controls crossOrigin="anonymous"
-                    style={{
-                        width: "100%",
-                        minHeight: "50%",
-                    }}
-                >
-                    <source src={videoUrl} />
-                    {subtitles.map((subtitle, index) => (
-                        <track key={index} src={subtitle.src} kind="subtitles" srcLang={subtitle.srcLang} label={subtitle.label} />
-                    ))}
-                </ReactPlayer>
-*/

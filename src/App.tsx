@@ -51,8 +51,8 @@ function App() {
     checkAccessToken();
   }, [usingActiveUrl, server])
 
-  console.log("Skal vi spørre om notifikasjons tillatelse?", shouldShowNotificationGate());
-  console.log("Har vi allerede spurt om notifikasjonstillatelse?", notificationPermissionPerformed);
+  // console.log("Skal vi spørre om notifikasjons tillatelse?", shouldShowNotificationGate());
+  // console.log("Har vi allerede spurt om notifikasjonstillatelse?", notificationPermissionPerformed);
   if (!notificationPermissionPerformed && shouldShowNotificationGate()) {
     return (<NotificationGate onResult={(result) => {
       setNotificationPermissionPerformed(true);

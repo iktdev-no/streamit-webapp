@@ -15,6 +15,12 @@ interface Props {
     onClick?: () => void;
 }
 
+export const defaultSize = {
+        width: { xs: 100, sm: 120, md: 160 },
+        height: { xs: 150, sm: 200, md: 240 }
+    };
+
+
 export default function CoverImage({
     src,
     alt,
@@ -31,10 +37,6 @@ export default function CoverImage({
 
     const url = src ? getSecureUrl(src, serverState, token) : "";
 
-    const defaultSize = {
-        width: { xs: 100, sm: 120, md: 160 },
-        height: { xs: 150, sm: 200, md: 240 }
-    };
 
     return (
         <Box
@@ -64,14 +66,14 @@ export default function CoverImage({
                     sx={{
                         position: "absolute",
                         display: "flex",
-                        top: 25,
+                        top: 10,
                         left: 0,
                         backgroundColor: "magenta",
                         zIndex: 1
                     }}
                 >
-                    <Typography variant="subtitle2" sx={{ margin: 0, paddingLeft: 0.5, paddingRight: 0.5, color: 'text.primary', backgroundColor: 'secondary.main' }}>Ny</Typography>
-                    <Typography variant="subtitle2" sx={{ margin: 0, paddingLeft: 0.5, paddingRight: 0.5, color: 'secondary.main', backgroundColor: 'text.primary' }}>Episode</Typography>
+                    <Typography sx={{ margin: 0, paddingLeft: 0.5, paddingRight: 0.5, color: 'text.primary', backgroundColor: 'secondary.main' }}>Ny</Typography>
+                    <Typography sx={{ margin: 0, paddingLeft: 0.5, paddingRight: 0.5, color: 'secondary.main', backgroundColor: 'text.primary' }}>Episode</Typography>
                 </Box>
             )}
 

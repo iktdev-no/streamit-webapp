@@ -1,3 +1,4 @@
+import type { ResumeMedia } from "../../types/content";
 import type { PfnsInfo } from "../../types/firebase";
 import { NotificationStatus } from "../../types/notification";
 import type { ServerInfo } from "../../types/serverInfo";
@@ -152,6 +153,17 @@ export function favoriteStorage(subKey: string | undefined) {
     });
 }
 
+export function resumeStorage(subKey: string | undefined) {
+    const prefix = "resume";
+    if (!subKey) {
+        console.log("subkey is missing for" + prefix)
+        return undefined;
+    }
+    return createInstanceStorage<ResumeMedia | undefined>(subKey, {
+        prefix: prefix,
+        fallback: undefined
+    });
+}
 
 
 export const FavoritesStorage = {
