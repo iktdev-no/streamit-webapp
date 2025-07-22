@@ -20,6 +20,7 @@ export default function ServerPage() {
                     <ServerItem serverInfo={activeServer} />
                 ) : (<p>Ingen aktiv server</p>)}
             </Box>
+            
 
         </Box>
     );

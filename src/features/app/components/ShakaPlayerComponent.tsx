@@ -114,7 +114,6 @@ const allEvents = [
             mediaDurationRef.current = video.duration; 
         }
         viewProgressRef.current = video.currentTime;
-        console.log(viewProgressRef.current, mediaDurationRef.current)
     }
 
     return (

@@ -14,7 +14,7 @@ import { NotificationGate } from './features/app/gate/NotificationGate';
 import { shouldShowNotificationGate } from './utils/shouldShowNotificationGate';
 import type { ServerInfo } from './types/serverInfo';
 import SetupGate from './features/app/gate/SetupGate';
-import { serverAccessTokenStorage, serverStorage } from './features/app/useStorage';
+import { savedServerStorage, serverAccessTokenStorage, serverStorage } from './features/app/useStorage';
 import ServerPage from './features/app/page/ServerPage';
 import ProfileGate from './features/app/gate/ProfileGate';
 import ProfileEditPage from './features/app/page/ProfileEditPage';
@@ -29,7 +29,6 @@ function App() {
   const [notificationPermissionPerformed, setNotificationPermissionPerformed] = useState(false);
   const [appReady, setAppReady] = useState(false);
   const profile = useSelector(selectProfile)
-
 
   useEffect(() => {
     const checkAccessToken = async () => {
@@ -67,6 +66,10 @@ function App() {
       console.log("🚀 Server satt:", serverStorage.get());
       serverAccessTokenStorage(server.id).set(token);
       console.log("🚀 Token satt:", serverAccessTokenStorage(server.id).get());
+      const servers = savedServerStorage.get()
+      const saved = servers.filter((i) => i.id != server.id)
+      saved.push(server);
+      savedServerStorage.set(saved);
       setServer(server)
     }} />
   }
