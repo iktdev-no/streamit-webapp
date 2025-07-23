@@ -120,7 +120,8 @@ function AppRenderer({ children }: AppRenderProps): JSX.Element {
   const isServerBannerVisible = useSelector(showServerBanner);
   return (
     <Box sx={{
-      height: "100vh"
+      height: "100vh",
+      backgroundColor: 'background.default'
     }}>
       {isServerBannerVisible ? (
         <>

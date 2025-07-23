@@ -101,26 +101,16 @@ export default function ResumeView() {
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",
                         filter: "blur(5px)",
-                        zIndex: -3
+                        zIndex: 0
                     }}></div>
                 )}
-                <Box display="none"
-                    sx={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: height,
-                        backgroundColor: "rgba(0, 0, 0, 0.7)", // mørk overlay
-                        zIndex: -2,
-                    }}
-                />
                 <DropShadow height={height} />
 
             </Box>
             <Box sx={{
                 display: "flex",
-                flexDirection: "row"
+                flexDirection: "row",
+                zIndex: 1
             }}>
                 <CoverImage
                     src={content.coverSrc}
