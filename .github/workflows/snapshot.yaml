@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: 🚚 Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⚡ Cache npm
         uses: actions/cache@v3
@@ -52,10 +52,10 @@ jobs:
 
     steps:
       - name: 🚚 Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 📥 Download build artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.3.0
         with:
           name: react-streamit-build
 
