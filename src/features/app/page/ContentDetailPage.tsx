@@ -135,7 +135,7 @@ export default function ContentDetailPage() {
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",
                         filter: "blur(5px)",
-                        zIndex: -3
+                        zIndex: 0
                     }}></div>
                 )}
                 <Box
@@ -146,7 +146,7 @@ export default function ContentDetailPage() {
                         width: "100%",
                         height: "100%",
                         backgroundColor: "rgba(0, 0, 0, 0.5)", // mørk overlay
-                        zIndex: -2,
+                        zIndex: 1,
                     }}
                 />
             </Box>
@@ -154,7 +154,7 @@ export default function ContentDetailPage() {
                 marginTop: 30,
                 display: "flex",
                 flexDirection: "column",
-                zIndex: 3
+                zIndex: 2
             }}>
                 <CoverImage
                     src={content.coverSrc}
