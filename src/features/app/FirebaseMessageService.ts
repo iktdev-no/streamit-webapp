@@ -9,17 +9,19 @@ class FirebaseMessageService {
   private listeners: Map<string, Listener[]> = new Map();
 
   constructor() {
-    onMessage(messaging, (payload) => {
-      const key = payload.data?.action || 'default';
-      const handlers = this.listeners.get(key);
+    if (messaging) {
+      onMessage(messaging, (payload) => {
+        const key = payload.data?.action || 'default';
+        const handlers = this.listeners.get(key);
 
-      if (handlers && handlers.length > 0) {
-        handlers.forEach((cb) => cb(payload));
-      } else {
-        console.log(`[FCM] Ingen lyttere for '${key}'`);
-        console.log('[FCM] Melding logget:', payload);
-      }
-    });
+        if (handlers && handlers.length > 0) {
+          handlers.forEach((cb) => cb(payload));
+        } else {
+          console.log(`[FCM] Ingen lyttere for '${key}'`);
+          console.log('[FCM] Melding logget:', payload);
+        }
+      });
+    }
   }
 
   addListener(topic: string, callback: Listener) {

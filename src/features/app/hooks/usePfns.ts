@@ -8,6 +8,11 @@ import { pfnsInfoStorage } from "../useStorage";
 function getFcmReceiverId(): Promise<string | null> {
     console.log("🔍 Starter token-henting…");
 
+    if (!messaging) {
+        console.warn("🚫 Firebase Messaging ikke tilgjengelig – avbryter token-henting.");
+        return Promise.resolve(null);
+    }
+
     return getToken(messaging, { vapidKey })
         .then((currentToken) => {
             if (currentToken) {
