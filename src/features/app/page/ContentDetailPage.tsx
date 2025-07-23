@@ -118,7 +118,7 @@ export default function ContentDetailPage() {
                 top: 0,
                 left: 0,
                 right: 0,
-                zIndex: -1,
+                zIndex: 0,
             }}>
                 {content.coverSrc && (
                     <div style={{
@@ -153,7 +153,8 @@ export default function ContentDetailPage() {
             <Box sx={{
                 marginTop: 30,
                 display: "flex",
-                flexDirection: "column"
+                flexDirection: "column",
+                zIndex: 3
             }}>
                 <CoverImage
                     src={content.coverSrc}
