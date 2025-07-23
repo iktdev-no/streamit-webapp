@@ -1,6 +1,6 @@
-import { Collapse, Fade, IconButton, InputBase } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { useState, useRef, useEffect } from 'react';
+import { Collapse, IconButton, InputBase } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
 
 export default function HeaderSearchField({
   value,
@@ -25,7 +25,7 @@ export default function HeaderSearchField({
 
   useEffect(() => {
     if (!showInput && value.length > 0) {
-        setShowInput(true)
+      setShowInput(true)
     }
   }, [value])
 

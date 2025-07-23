@@ -1,27 +1,26 @@
-import { useEffect, useState, type JSX } from 'react'
-import logo from './assets/logo.svg';
-import './App.css'
-import { ConnectGate } from './features/app/gate/ConnectGate'
-import { useSelector } from 'react-redux';
-import { selectProfile, setProfile, showServerBanner } from './features/app/store/appSlice';
-import ProfilePage from './features/app/page/ProfilePage';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
-import ContentPage from './features/app/page/ContentPage';
-import ContentDetailPage from './features/app/page/ContentDetailPage';
-import ContentPlayPage from './features/app/page/ContentPlayPage';
-import { ToastContainer, toast } from "react-toastify";
-import { NotificationGate } from './features/app/gate/NotificationGate';
-import { shouldShowNotificationGate } from './utils/shouldShowNotificationGate';
-import type { ServerInfo } from './types/serverInfo';
-import SetupGate from './features/app/gate/SetupGate';
-import { savedServerStorage, serverAccessTokenStorage, serverStorage } from './features/app/useStorage';
-import ServerPage from './features/app/page/ServerPage';
-import ProfileGate from './features/app/gate/ProfileGate';
-import ProfileEditPage from './features/app/page/ProfileEditPage';
-import ServerBanner from './features/app/components/ServerBanner';
 import { Box } from '@mui/material';
+import { useEffect, useState, type JSX } from 'react';
+import { useSelector } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ToastContainer, toast } from "react-toastify";
+import './App.css';
 import { RequestNewAccessToken } from './features/app/api/Post';
+import ServerBanner from './features/app/components/ServerBanner';
+import { ConnectGate } from './features/app/gate/ConnectGate';
+import { NotificationGate } from './features/app/gate/NotificationGate';
+import ProfileGate from './features/app/gate/ProfileGate';
+import SetupGate from './features/app/gate/SetupGate';
+import ContentDetailPage from './features/app/page/ContentDetailPage';
+import ContentPage from './features/app/page/ContentPage';
+import ContentPlayPage from './features/app/page/ContentPlayPage';
+import ProfileEditPage from './features/app/page/ProfileEditPage';
+import ProfilePage from './features/app/page/ProfilePage';
+import ServerPage from './features/app/page/ServerPage';
+import { selectProfile, showServerBanner } from './features/app/store/appSlice';
 import { selectActiveUrl } from './features/app/store/serverSlice';
+import { savedServerStorage, serverAccessTokenStorage, serverStorage } from './features/app/useStorage';
+import type { ServerInfo } from './types/serverInfo';
+import { shouldShowNotificationGate } from './utils/shouldShowNotificationGate';
 
 function App() {
   const [server, setServer] = useState<ServerInfo | null>(serverStorage.get());
@@ -137,6 +136,5 @@ function AppRenderer({ children }: AppRenderProps): JSX.Element {
   )
 }
 
-const defaultRouter = () => { }
 
 export default App

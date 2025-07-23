@@ -1,14 +1,14 @@
+import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, TextField } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { selectProfile, setProfile } from "../store/appSlice";
 import { useEffect, useState } from "react";
-import ImagePicker from "../components/ImagePicker";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import type { Profile, RemoteImage } from "../../../types/profile";
 import { GetProfileImages } from "../api/Get";
-import AddIcon from '@mui/icons-material/Add';
 import { UpdateOrCreateProfile } from "../api/Post";
 import Header from "../components/Header";
-import { useNavigate } from "react-router-dom";
+import ImagePicker from "../components/ImagePicker";
+import { selectProfile, setProfile } from "../store/appSlice";
 
 
 interface ProfileEditPageProps {

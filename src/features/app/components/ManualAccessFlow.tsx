@@ -1,11 +1,10 @@
 import { Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
-import type { ServerInfo } from "../../../types/serverInfo";
 import { useEffect, useState } from "react";
-import { isMobile } from 'react-device-detect';
+import type { ServerInfo } from "../../../types/serverInfo";
 import { GetServerInfo } from "../api/Get";
+import { useServerAuthenticationFlow, type SetupFlowStep } from "../hooks/useServerAuthorizationAndDelegation";
 import useServerVerification from "../hooks/useServerVerify";
 import { serverAccessTokenStorage } from "../useStorage";
-import { useServerAuthenticationFlow, type SetupFlowStep } from "../hooks/useServerAuthorizationAndDelegation";
 
 export interface ManualAccessFlowProps {
     pin: string | null,
@@ -116,7 +115,7 @@ export default function ManualAccessFlow({ pin, setServer }: ManualAccessFlowPro
                 </Button>
             </Stack>
             {(flowStep === 'polling' || flowStep === 'failed') && (
-                <Box sx={{ mt: 10}}>
+                <Box sx={{ mt: 10 }}>
                     <Typography gutterBottom>Pin code</Typography>
                     <Typography variant="h1"
                         gutterBottom

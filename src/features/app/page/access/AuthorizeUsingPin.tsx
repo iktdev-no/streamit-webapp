@@ -1,5 +1,0 @@
-
-
-export function AuthorizeUsingPin() {
-  return (<></>);
-}

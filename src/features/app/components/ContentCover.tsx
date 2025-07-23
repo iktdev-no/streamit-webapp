@@ -1,7 +1,7 @@
 import { Box, Typography, type SxProps, type Theme } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { selectToken, selectServerState } from "../store/serverSlice";
+import { selectServerState, selectToken } from "../store/serverSlice";
 import { getSecureUrl } from "../utils";
 
 interface Props {
@@ -16,9 +16,9 @@ interface Props {
 }
 
 export const defaultSize = {
-        width: { xs: 100, sm: 120, md: 160 },
-        height: { xs: 150, sm: 200, md: 240 }
-    };
+    width: { xs: 100, sm: 120, md: 160 },
+    height: { xs: 150, sm: 200, md: 240 }
+};
 
 
 export default function CoverImage({

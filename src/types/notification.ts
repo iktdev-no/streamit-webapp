@@ -9,8 +9,8 @@ export type NotificationStatus = typeof NotificationStatus[keyof typeof Notifica
 
 
 export interface AuthInitiateRequest {
-    pin: string;
-    deviceInfo: RequestDeviceInfo;
+  pin: string;
+  deviceInfo: RequestDeviceInfo;
 }
 
 export interface RequestDeviceInfo {
@@ -22,6 +22,6 @@ export interface RequestDeviceInfo {
 }
 
 export interface RequestCreatedResponse {
-    expiry: number
-    sessionId: string
+  expiry: number
+  sessionId: string
 }

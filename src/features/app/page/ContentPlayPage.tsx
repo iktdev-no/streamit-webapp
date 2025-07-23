@@ -1,13 +1,13 @@
-import { useSelector } from "react-redux";
-import { selectMediaItem, type MediaItem } from "../store/playContentSlice";
-import { selectServerId, selectServerState, selectToken, type ServerState } from "../store/serverSlice";
-import type { Episode, Movie, ResumeMedia, Serie, Subtitle } from "../../../types/content";
 import { Box } from "@mui/material";
-import { getLanguageNameFromISO3, getSecureUrl, useVideoDecoderSupport } from "../utils";
-import Header from "../components/Header";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import type { Episode, ResumeMedia, Serie, Subtitle } from "../../../types/content";
+import Header from "../components/Header";
 import ShakaPlayerComponent from "../components/ShakaPlayerComponent";
+import { selectMediaItem, type MediaItem } from "../store/playContentSlice";
+import { selectServerId, selectServerState, selectToken } from "../store/serverSlice";
 import { resumeStorage } from "../useStorage";
+import { getLanguageNameFromISO3, getSecureUrl, useVideoDecoderSupport } from "../utils";
 
 export interface TrackConfig {
     kind: "subtitles";
@@ -80,7 +80,7 @@ export default function ContentPlayPage() {
     }
 
     const title = generateTitle(mediaItem);
-    
+
 
     //console.log(codecs);
 

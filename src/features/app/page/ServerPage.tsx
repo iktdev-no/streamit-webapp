@@ -1,8 +1,8 @@
-import { Box, Typography, type Grid } from "@mui/material";
-import Header from "../components/Header";
+import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { serverStorage } from "../useStorage";
+import Header from "../components/Header";
 import ServerItem from "../components/ServerItem";
+import { serverStorage } from "../useStorage";
 
 export default function ServerPage() {
     const navigate = useNavigate();
@@ -16,11 +16,11 @@ export default function ServerPage() {
             />
             <Box sx={{ paddingTop: "64px", display: "flex", flexDirection: "column", height: "100%" }}>
                 <Typography variant="h4" sx={{ textAlign: "center", marginTop: 2 }}>Aktiv server</Typography>
-                { activeServer ? (
+                {activeServer ? (
                     <ServerItem serverInfo={activeServer} />
                 ) : (<p>Ingen aktiv server</p>)}
             </Box>
-            
+
 
         </Box>
     );

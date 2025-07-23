@@ -15,9 +15,9 @@ export const getWebClientDeviceInfo = (): RequestDeviceInfo => {
 
   const model = result.device.model ?? (
     osPlatform.includes('Android') ? 'Android Device' :
-    osPlatform.includes('iPhone') ? 'iPhone' :
-    osPlatform.includes('Mac') ? 'Mac Device' :
-    'Web Device'
+      osPlatform.includes('iPhone') ? 'iPhone' :
+        osPlatform.includes('Mac') ? 'Mac Device' :
+          'Web Device'
   );
 
   const manufacturerMap: Record<string, string> = {

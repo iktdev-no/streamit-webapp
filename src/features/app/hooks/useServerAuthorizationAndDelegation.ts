@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
-import { InitMethodBasedDelegateRequest } from "../api/Post";
+import { useEffect, useState } from "react";
 import type { RequestCreatedResponse } from "../../../types/notification";
+import { InitMethodBasedDelegateRequest } from "../api/Post";
 
 interface UseAuthFlowResult {
-    token: string | null;
-    loading: boolean;
+  token: string | null;
+  loading: boolean;
 }
 
 export type AuthMode = 'pin' | 'qr'
 
 export type SetupFlowStep =
-    | 'idle'
-    | 'waitingForScan'
-    | 'identifying'
-    | 'polling'
-    | 'connected'
-    | 'failed';
+  | 'idle'
+  | 'waitingForScan'
+  | 'identifying'
+  | 'polling'
+  | 'connected'
+  | 'failed';
 
 
 export function useServerAuthenticationFlow(
@@ -76,39 +76,39 @@ export function useServerAuthenticationFlow(
 
 
 async function pollForPermission(
-    serverAddress: string,
-    pin: string,
-    sessionId: string,
-    setFlow: (f: SetupFlowStep) => void
+  serverAddress: string,
+  pin: string,
+  sessionId: string,
+  setFlow: (f: SetupFlowStep) => void
 ): Promise<string | null> {
-    const start = Date.now();
-    setFlow('polling');
+  const start = Date.now();
+  setFlow('polling');
 
-    while (Date.now() - start < 30000) {
-        try {
-            const response = await fetch(`${serverAddress}/api/auth/delegate/request/pending/${pin}/permitted/${sessionId}`);
+  while (Date.now() - start < 30000) {
+    try {
+      const response = await fetch(`${serverAddress}/api/auth/delegate/request/pending/${pin}/permitted/${sessionId}`);
 
-            // Stopp umiddelbart hvis 401 eller 410
-            if (response.status === 409 || response.status === 410) {
-                console.warn(`Polling avbrutt – mottok ${response.status}`);
-                setFlow('failed');
-                return null;
-            }
+      // Stopp umiddelbart hvis 401 eller 410
+      if (response.status === 409 || response.status === 410) {
+        console.warn(`Polling avbrutt – mottok ${response.status}`);
+        setFlow('failed');
+        return null;
+      }
 
-            if (response.status === 200 || response.ok) {
-                const token = response.text();
+      if (response.status === 200 || response.ok) {
+        const token = response.text();
 
-                return token;
-            }
-        } catch (e) {
-            console.warn("Polling-feil:", e);
-        }
-
-        await new Promise(res => setTimeout(res, 3000));
+        return token;
+      }
+    } catch (e) {
+      console.warn("Polling-feil:", e);
     }
 
-    setFlow('failed');
-    return null;
+    await new Promise(res => setTimeout(res, 3000));
+  }
+
+  setFlow('failed');
+  return null;
 }
 
 

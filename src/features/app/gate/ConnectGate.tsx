@@ -1,11 +1,10 @@
+import { Box } from '@mui/material';
 import { useEffect, useState, type JSX } from 'react';
 import { useDispatch } from 'react-redux';
-import { selectServer, setToken, setActiveUrl } from '../store/serverSlice';
 import useServer from '../hooks/useServerEndpoint';
+import { default as FastConnectUsingQR, default as GateAuthenticateUsingQR } from '../page/access/FastConnectUsingQR';
+import { selectServer, setActiveUrl, setToken } from '../store/serverSlice';
 import { serverAccessTokenStorage, serverStorage } from '../useStorage';
-import GateAuthenticateUsingQR from '../page/access/FastConnectUsingQR';
-import { Box } from '@mui/material';
-import FastConnectUsingQR from '../page/access/FastConnectUsingQR';
 
 interface ConnectGateProps {
   onReady: () => void;
@@ -51,11 +50,13 @@ export function ConnectGate({ onReady, onRequiresSetup }: ConnectGateProps) {
 
 function showSetupScreen(): JSX.Element {
   return (
-    <Box sx={{ display: 'flex', flexDirection: {
+    <Box sx={{
+      display: 'flex', flexDirection: {
         xs: 'column',
         sm: 'column',
         md: 'row',
-    }, alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      }, alignItems: 'center', justifyContent: 'center', height: '100vh'
+    }}>
       <FastConnectUsingQR />
     </Box>
   );

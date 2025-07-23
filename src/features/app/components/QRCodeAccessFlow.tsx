@@ -1,10 +1,10 @@
-import { Box, CircularProgress, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { QRCodeCanvas } from "qrcode.react";
-import { useServerAuthenticationFlow, type SetupFlowStep } from "../hooks/useServerAuthorizationAndDelegation";
-import type { FcmPayload, PfnsObject } from "../../../types/streamitTypes";
 import { useEffect, useState } from "react";
 import type { ServerInfo } from "../../../types/serverInfo";
-import { useFcmListener, configureServerKey } from "../hooks/useFcmListener";
+import type { FcmPayload, PfnsObject } from "../../../types/streamitTypes";
+import { configureServerKey, useFcmListener } from "../hooks/useFcmListener";
+import { useServerAuthenticationFlow, type SetupFlowStep } from "../hooks/useServerAuthorizationAndDelegation";
 import useServerVerification from "../hooks/useServerVerify";
 import { serverAccessTokenStorage } from "../useStorage";
 

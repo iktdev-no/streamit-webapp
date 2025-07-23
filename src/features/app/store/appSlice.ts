@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import type { Catalog } from '../../../types/content'
 import type { Profile } from '../../../types/profile'
 import type { RootState } from '../store'
-import type { Catalog } from '../../../types/content'
 
 interface AppState {
   profile: Profile | null,

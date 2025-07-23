@@ -1,20 +1,19 @@
-import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
 import HomeFilledIcon from '@mui/icons-material/HomeFilled';
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
-import TvIcon from '@mui/icons-material/Tv';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { useEffect, useState } from "react";
-import ContentGridFragment from "./ContentPageFragment/ContentGridFragment";
-import MoreFragment from "./ContentPageFragment/MoreFragment";
-import HomeFragment from "./ContentPageFragment/HomeFragment";
-import type { Catalog } from "../../../types/content";
-import { useNavigate } from "react-router-dom";
+import TvIcon from '@mui/icons-material/Tv';
+import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { setSelectedContent } from "../store/appSlice";
-import { useSessionState } from "../sessionUtil";
+import { useNavigate } from "react-router-dom";
+import type { Catalog } from "../../../types/content";
 import Header from "../components/Header";
 import HeaderSearchField from "../components/HeaderSearchField";
+import { useSessionState } from "../sessionUtil";
+import { setSelectedContent } from "../store/appSlice";
+import ContentGridFragment from "./ContentPageFragment/ContentGridFragment";
 import ContentGridSearchFragment from "./ContentPageFragment/ContentGridSearchFragment";
+import HomeFragment from "./ContentPageFragment/HomeFragment";
+import MoreFragment from "./ContentPageFragment/MoreFragment";
 
 export default function ContentPage() {
     const [query, setQuery] = useSessionState<string>("searchQuery", "");

@@ -1,6 +1,5 @@
 
 import { store } from '../store';
-import type { ServerState } from '../store/serverSlice';
 import { isRemote } from '../utils';
 
 function Headers(isRemote: boolean, token: string | null): Record<string, string> {
@@ -32,7 +31,7 @@ export interface WebResponse<T> {
     data: T
 }
 
-export async function PfnsPost<T>(path: string[], body: any): Promise<WebResponse<T>> {
+export async function PfnsPost<T>(path: string[], body: string): Promise<WebResponse<T>> {
     const headers: Record<string, string> = {
         'Content-Type': 'application/json'
     }

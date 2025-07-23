@@ -1,7 +1,7 @@
 // hooks/useVerifyServerConnection.ts
 import { useEffect, useState } from 'react';
-import { Logger, useLogger } from '../utils';
 import type { ServerInfo } from '../../../types/serverInfo';
+import { useLogger } from '../utils';
 import { probeHeartbeat, validateToken } from './useServerEndpoint';
 
 export interface ServerConnectionSummary {

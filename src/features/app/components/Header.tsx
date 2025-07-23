@@ -15,10 +15,10 @@ export default function Header({ title, onBackClicked, backgroundColor, rightEle
   const isServerBannerVisible = useSelector(showServerBanner);
 
   return (
-    <AppBar position="fixed" color="info" elevation={0} sx={{ 
-        top: (isServerBannerVisible) ? "36px" : "0px",
-        backgroundColor: (backgroundColor) ? backgroundColor : 'primary.main'
-      }}>
+    <AppBar position="fixed" color="info" elevation={0} sx={{
+      top: (isServerBannerVisible) ? "36px" : "0px",
+      backgroundColor: (backgroundColor) ? backgroundColor : 'primary.main'
+    }}>
       <Toolbar sx={{ minHeight: 64, display: 'flex', justifyContent: 'space-between' }}>
         {onBackClicked ? (
           <IconButton

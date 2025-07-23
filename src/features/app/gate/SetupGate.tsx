@@ -1,15 +1,15 @@
-import logo from '../../../assets/logo.svg';
-import { useMemo, useState } from "react";
+import HttpIcon from '@mui/icons-material/Http';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import { Box, Button, Typography, useTheme } from "@mui/material";
-import { usePfns } from "../hooks/usePfns";
-import { generateRandomPin } from "../utils";
+import { useMemo, useState } from "react";
+import logo from '../../../assets/logo.svg';
 import type { ServerInfo } from "../../../types/serverInfo";
 import type { PfnsObject } from "../../../types/streamitTypes";
 import Header from '../components/Header';
-import HttpIcon from '@mui/icons-material/Http';
-import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
-import QRCodeAccessFlow from '../components/QRCodeAccessFlow';
 import ManualAccessFlow from '../components/ManualAccessFlow';
+import QRCodeAccessFlow from '../components/QRCodeAccessFlow';
+import { usePfns } from "../hooks/usePfns";
+import { generateRandomPin } from "../utils";
 
 interface SetupGateProps {
   setServer: (server: ServerInfo, token: string | null) => void;
@@ -21,7 +21,7 @@ export default function SetupGate({ setServer }: SetupGateProps) {
   const theme = useTheme();
   const [activeMode, setActiveMode] = useState<ActiveMode>(null);
   const { pfnsInfo, loading: pfnsLoading } = usePfns();
-  const pinCode =  generateRandomPin(6)
+  const pinCode = generateRandomPin(6)
 
   const pfnsObject: PfnsObject | null = useMemo(() => {
     if (!pfnsInfo?.pfnsId) return null;
@@ -50,25 +50,25 @@ export default function SetupGate({ setServer }: SetupGateProps) {
               <Button sx={{
                 height: 200,
                 width: 200,
-                 margin: 2
+                margin: 2
               }} variant='outlined' onClick={() => setActiveMode('qr')}>
-                <QrCodeScannerIcon sx={{ 
-                  height: 100, 
+                <QrCodeScannerIcon sx={{
+                  height: 100,
                   width: 100,
                   color: "secondary.dark"
                 }} />
               </Button>
             )}
             <Button sx={{
-                height: 200,
-                width: 200,
-                margin: 2
+              height: 200,
+              width: 200,
+              margin: 2
             }} variant='outlined' onClick={() => setActiveMode('manual')}>
-              <HttpIcon  sx={{ 
-                  height: 100, 
-                  width: 100,
-                  color: "secondary.dark"
-                }} />
+              <HttpIcon sx={{
+                height: 100,
+                width: 100,
+                color: "secondary.dark"
+              }} />
             </Button>
           </Box>
         </Box>

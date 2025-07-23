@@ -2,8 +2,8 @@ import type { MediaItem } from "../features/app/store/playContentSlice";
 
 
 export const ContentType = {
-  Movie: 'Movie',
-  Serie: 'Serie',
+    Movie: 'Movie',
+    Serie: 'Serie',
 } as const;
 
 export type ContentType = (typeof ContentType)[keyof typeof ContentType];

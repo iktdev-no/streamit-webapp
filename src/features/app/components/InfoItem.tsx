@@ -18,7 +18,7 @@ type Props = {
   orientation?: "horizontal" | "vertical";
 };
 
-export function InfoList({ items, orientation, sx = {}}: Props) {
+export function InfoList({ items, orientation, sx = {} }: Props) {
   const getLayoutStyle = (index: number, total: number): object => {
     if (index === 0) return {
       borderTopLeftRadius: 8,

@@ -48,7 +48,7 @@ function createInstanceStorage<T>(scopeKey: string, options?: { prefix?: string;
     const key = scopeKey ? `${options?.prefix ?? ''}_${scopeKey}` : undefined;
     return {
         get(): T | null {
-            
+
             if (!key) {
                 console.warn("Attempted to get storage with undefined key");
                 return options?.fallback ?? null;

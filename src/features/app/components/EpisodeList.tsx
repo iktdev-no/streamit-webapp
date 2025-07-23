@@ -1,6 +1,6 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from "@mui/material";
 import type { Episode } from "../../../types/content";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 interface Props {
@@ -23,10 +23,10 @@ export default function EpisodeList({ episodes, defaultExpandedSeason = 1, onEpi
             {Object.entries(episodesBySeason).map(([seasonKey, seasonEpisodes]) => {
                 const seasonNumber = Number(seasonKey);
                 return (
-                    <Accordion 
-                    key={seasonKey} defaultExpanded={seasonNumber === defaultExpandedSeason}>
-                        <AccordionSummary 
-                         expandIcon={<ExpandMoreIcon />}>
+                    <Accordion
+                        key={seasonKey} defaultExpanded={seasonNumber === defaultExpandedSeason}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}>
                             <Typography variant="h6">Sesong {seasonNumber}</Typography>
                         </AccordionSummary>
                         <AccordionDetails sx={{
@@ -36,16 +36,16 @@ export default function EpisodeList({ episodes, defaultExpandedSeason = 1, onEpi
                                 <Box
                                     onClick={() => onEpisodeSelected(episode)}
                                     key={`${episode.season}-${episode.episode}`}
-                                    sx={{ 
-                                        py: 1, 
-                                        pl: 2, 
-                                        textAlign: "left", 
-                                        cursor: "pointer", 
+                                    sx={{
+                                        py: 1,
+                                        pl: 2,
+                                        textAlign: "left",
+                                        cursor: "pointer",
                                         backgroundColor: 'primary.dark', // 👈 bruker farge fra tema
                                         '&:hover': {
                                             backgroundColor: 'primary.light', // valgfritt: hover-effekt
                                         },
-                                        }}>
+                                    }}>
                                     <Typography variant="body1">
                                         Episode {episode.episode} {(episode.title) && " - " + episode.title}
                                     </Typography>

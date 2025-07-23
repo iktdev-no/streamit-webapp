@@ -1,10 +1,10 @@
-import { Box, Button, IconButton, Typography } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
-import type { Catalog } from '../../../types/content';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ContentCover from './ContentCover';
+import { Box, IconButton, Typography } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
+import type { Catalog } from '../../../types/content';
+import ContentCover from './ContentCover';
 
 interface HorizontalCatalogProps {
     title?: string;
@@ -110,8 +110,8 @@ export default function HorizontalCatalog({ title, items, onItemClick }: Horizon
                     overflowX: 'auto',
                     scrollBehavior: 'smooth',
                     cursor: isDown ? 'grabbing' : 'grab',
-                    paddingLeft: (isMobile) ? 1: '52px',  // litt mer enn venstre knapp
-                    paddingRight: (isMobile) ? 1: '52px',  // litt mer enn venstre knapp
+                    paddingLeft: (isMobile) ? 1 : '52px',  // litt mer enn venstre knapp
+                    paddingRight: (isMobile) ? 1 : '52px',  // litt mer enn venstre knapp
                     '&::-webkit-scrollbar': { display: 'none' },
                     scrollbarWidth: 'none', // Firefox
                     msOverflowStyle: 'none', // IE 10+
@@ -119,7 +119,7 @@ export default function HorizontalCatalog({ title, items, onItemClick }: Horizon
             >
                 {items?.map(item => (
                     <Box key={item.id} sx={{ flex: '0 0 auto' }}>
-                        <ContentCover 
+                        <ContentCover
                             src={item.coverSrc}
                             alt={item.title}
                             draggable={false}

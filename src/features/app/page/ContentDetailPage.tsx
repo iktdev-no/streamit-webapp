@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import { type Summary, type Catalog, type Serie, type Episode, type Movie } from "../../../types/content"
-import { GetMovie, GetSerie, GetSummary } from "../api/Get";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Box, Button, CircularProgress, IconButton, Typography } from "@mui/material";
-import { selectedContent } from "../store/appSlice";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import EpisodeList from "../components/EpisodeList";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
-import { setMediaItem, type MediaItem } from "../store/playContentSlice";
 import { ToastContainer, toast } from "react-toastify";
-import { favoriteStorage } from "../useStorage";
+import { type Catalog, type Episode, type Movie, type Serie, type Summary } from "../../../types/content";
+import { GetMovie, GetSerie, GetSummary } from "../api/Get";
 import CoverImage from "../components/ContentCover";
-import { selectServerId, selectServerState, selectToken } from "../store/serverSlice";
-import { getSecureUrl } from "../utils";
+import EpisodeList from "../components/EpisodeList";
+import Header from "../components/Header";
 import SummaryView from "../components/SummaryView";
+import { selectedContent } from "../store/appSlice";
+import { setMediaItem, type MediaItem } from "../store/playContentSlice";
+import { selectServerId, selectServerState, selectToken } from "../store/serverSlice";
+import { favoriteStorage } from "../useStorage";
+import { getSecureUrl } from "../utils";
 
 export default function ContentDetailPage() {
     const dispatch = useDispatch();
@@ -83,7 +83,7 @@ export default function ContentDetailPage() {
     function toggleFavorite() {
         if (!content) return;
         const stored: number[] = favorites?.get() ?? []
-        if (isFavorited) {           
+        if (isFavorited) {
             favorites?.set(stored.filter((id) => id != content.id) ?? [])
         } else {
             stored.push(content.id)

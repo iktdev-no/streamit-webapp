@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { ServerInfo } from '../../../types/serverInfo';
-import { Logger, useLogger } from '../utils'
 import { serverAccessTokenStorage } from '../useStorage';
+import { Logger, useLogger } from '../utils';
 
 interface NavigatorStandalone extends Navigator {
   standalone?: boolean;

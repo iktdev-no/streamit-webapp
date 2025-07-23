@@ -1,8 +1,7 @@
+import { CircularProgress, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import type { ContentType } from "../../../../types/content";
-import type { Catalog } from "../../../../types/content";
+import type { Catalog, ContentType } from "../../../../types/content";
 import { MovieCatalog, SerieCatalog } from "../../api/Get";
-import { CircularProgress, Typography, Grid } from "@mui/material";
 import ContentCover from "../../components/ContentCover";
 
 interface ContentGridFragmentProps {
@@ -33,12 +32,12 @@ export default function ContentGridFragment({ type, onContentSelected }: Content
             }}>
                 {content.map(item => (
                     <Grid key={item.id}>
-                        <ContentCover 
+                        <ContentCover
                             onClick={() => onContentSelected(item)}
                             src={item.coverSrc}
                             alt={item.title}
                         />
-                        
+
                     </Grid>
                 ))}
             </Grid>

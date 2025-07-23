@@ -1,5 +1,5 @@
+import { Box, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Box, Select, MenuItem, Typography } from "@mui/material";
 import type { Summary } from "../../../types/content";
 import { getLanguageNameFromISO3 } from "../utils";
 

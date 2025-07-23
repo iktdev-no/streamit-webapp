@@ -1,10 +1,10 @@
 // components/NotificationGate.tsx
-import logo from '../../../assets/logo.svg';
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect } from "react";
+import logo from '../../../assets/logo.svg';
 import type { NotificationStatus } from "../../../types/notification";
 import { useNotificationPermission } from "../hooks/useNotificationPermission";
 import { notificationStorage } from "../useStorage";
-import { Box, Button, Typography } from "@mui/material";
 
 interface NotificationGateProps {
     onResult: (status: NotificationStatus) => void;
@@ -69,7 +69,7 @@ export function NotificationGate({ onResult }: NotificationGateProps) {
                         <Button size='large' color="secondary" variant='contained' onClick={handleDeny}>
                             Nei takk
                         </Button>
-                        <Button size='large'  variant='contained' onClick={handleAllow}>
+                        <Button size='large' variant='contained' onClick={handleAllow}>
                             Tillat
                         </Button>
                     </Box>

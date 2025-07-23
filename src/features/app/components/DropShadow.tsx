@@ -4,7 +4,7 @@ export interface DropShadowProps {
     height?: number
 }
 
-export default function DropShadow({height}: DropShadowProps) {
+export default function DropShadow({ height }: DropShadowProps) {
     return (
         <Box sx={{
             position: "absolute",
@@ -12,7 +12,7 @@ export default function DropShadow({height}: DropShadowProps) {
             overflowX: "hidden",
             maxWidth: "100%",
             width: "100%",
-                    zIndex: -2,
+            zIndex: -2,
 
         }}>
             <Box

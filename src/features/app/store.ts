@@ -1,7 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit'
-import appReducer from './store/appSlice'
+import { configureStore } from '@reduxjs/toolkit';
+import appReducer from './store/appSlice';
+import playableContentReducer from './store/playContentSlice';
 import serverReducer from './store/serverSlice';
-import playableContentReducer from './store/playContentSlice'
 
 export const store = configureStore({
   reducer: {

@@ -1,7 +1,7 @@
 
 export interface Heartbeat {
-    status: boolean;
-    time: number
+  status: boolean;
+  time: number
 }
 
 export interface FcmPayload {

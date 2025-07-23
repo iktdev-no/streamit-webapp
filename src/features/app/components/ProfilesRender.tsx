@@ -1,8 +1,8 @@
+import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from "@mui/material";
-import type { Profile, RemoteImage } from "../../../types/profile";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import AddIcon from '@mui/icons-material/Add';
+import type { Profile, RemoteImage } from "../../../types/profile";
 import { GetProfileImages } from "../api/Get";
 import ImagePicker from "./ImagePicker";
 

@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import 'shaka-player/dist/controls.css';
-import shaka from "shaka-player/dist/shaka-player.ui"
+import shaka from "shaka-player/dist/shaka-player.ui";
 
 
-import type { TrackConfig } from '../page/ContentPlayPage';
 import { CircularProgress } from '@mui/material';
+import type { TrackConfig } from '../page/ContentPlayPage';
 
 export interface ShakaPlayerComponentProps {
     videoUrl?: string,
     subtitles: TrackConfig[],
     progress?: number,
-    onSaveProgress?: ( progress: number, duration: number ) => void
+    onSaveProgress?: (progress: number, duration: number) => void
 }
 
 const ShakaPlayerComponent = ({ videoUrl, subtitles, progress, onSaveProgress }: ShakaPlayerComponentProps) => {
@@ -21,22 +21,22 @@ const ShakaPlayerComponent = ({ videoUrl, subtitles, progress, onSaveProgress }:
     const mediaDurationRef = useRef(-1);
 
 
-const allEvents = [
-  'loading',
-  'loaded',
-  //'trackschanged',
-  'adaptation',
-  'manifestparsed',
-  'streaming',
-  'variantchanged',
-  'drmstatus',
-  'texttrackvisibility',
-  'timelineregionadded',
-  'mediaqualitychanged',
-  'play',
-  'pause',
-  'ended'
-];
+    const allEvents = [
+        'loading',
+        'loaded',
+        //'trackschanged',
+        'adaptation',
+        'manifestparsed',
+        'streaming',
+        'variantchanged',
+        'drmstatus',
+        'texttrackvisibility',
+        'timelineregionadded',
+        'mediaqualitychanged',
+        'play',
+        'pause',
+        'ended'
+    ];
 
     useEffect(() => {
         if (!videoUrl) {
@@ -60,21 +60,21 @@ const allEvents = [
             setIsBuffering(player.isBuffering())
         });
         for (const eventType of allEvents) {
-        player.addEventListener(eventType, (event: any) => {
-            console.log(`Event: ${eventType}`, event);
-        });
+            player.addEventListener(eventType, (event: any) => {
+                console.log(`Event: ${eventType}`, event);
+            });
         }
         player.attach(video).then(() => {
-            player.load(videoUrl).then( async () => {
+            player.load(videoUrl).then(async () => {
                 await Promise.all(
-                    subtitles.map((track) => 
+                    subtitles.map((track) =>
                         player.addTextTrackAsync(
-                        track.src,
-                        track.srcLang,
-                        track.kind,
-                        undefined,
-                        undefined,
-                        track.label
+                            track.src,
+                            track.srcLang,
+                            track.kind,
+                            undefined,
+                            undefined,
+                            track.label
                         )
                     )
                 );
@@ -110,38 +110,38 @@ const allEvents = [
 
     const onTimeUpdate = () => {
         if (!video) return
-        if (video.duration != mediaDurationRef.current) { 
-            mediaDurationRef.current = video.duration; 
+        if (video.duration != mediaDurationRef.current) {
+            mediaDurationRef.current = video.duration;
         }
         viewProgressRef.current = video.currentTime;
     }
 
     return (
         <>
-        <video
-            ref={videoRef}
-            width="100%"
-            height="100%"
-            controls
-            autoPlay
-            style={{ backgroundColor: 'black' }}
-            crossOrigin="anonymous"
-            onTimeUpdate={onTimeUpdate}
-        />
-        {isBuffering && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 'calc(50% - 30px)',
-            left: 'calc(50% - 30px)',
-            width: 60,
-            height: 60,
-            zIndex: 10,
-          }}
-        >
-          <CircularProgress  />
-        </div>
-      )}
+            <video
+                ref={videoRef}
+                width="100%"
+                height="100%"
+                controls
+                autoPlay
+                style={{ backgroundColor: 'black' }}
+                crossOrigin="anonymous"
+                onTimeUpdate={onTimeUpdate}
+            />
+            {isBuffering && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 'calc(50% - 30px)',
+                        left: 'calc(50% - 30px)',
+                        width: 60,
+                        height: 60,
+                        zIndex: 10,
+                    }}
+                >
+                    <CircularProgress />
+                </div>
+            )}
         </>
     );
 };

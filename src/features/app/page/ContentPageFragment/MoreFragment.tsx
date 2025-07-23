@@ -1,19 +1,19 @@
-import { Box, Button, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { InfoList, type InfoItem } from "../../components/InfoItem";
-import InfoIcon from '@mui/icons-material/Info';
-import ExtensionIcon from '@mui/icons-material/Extension';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CloudIcon from '@mui/icons-material/Cloud';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import { useSelector } from "react-redux";
-import { selectProfile } from "../../store/appSlice";
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ExtensionIcon from '@mui/icons-material/Extension';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import InfoIcon from '@mui/icons-material/Info';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import SubtitlesIcon from '@mui/icons-material/Subtitles';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import StreamIcon from '@mui/icons-material/Stream';
+import SubtitlesIcon from '@mui/icons-material/Subtitles';
+import { Box, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { InfoList, type InfoItem } from "../../components/InfoItem";
 import { usePwaUpdate } from "../../hooks/usePwaUpdate";
+import { selectProfile } from "../../store/appSlice";
 
 export default function MoreFragment() {
     const navigate = useNavigate();

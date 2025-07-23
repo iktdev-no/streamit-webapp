@@ -1,15 +1,15 @@
-import { Box, Button, LinearProgress, linearProgressClasses, styled, Typography } from "@mui/material";
-import type { ResumeMedia } from "../../../types/content";
-import { getSecureUrl } from "../utils";
-import { useDispatch, useSelector } from "react-redux";
-import { selectServerId, selectServerState, selectToken } from "../store/serverSlice";
-import CoverImage, { defaultSize } from "./ContentCover";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { useLocation, useNavigate } from "react-router-dom";
-import { setMediaItem } from "../store/playContentSlice";
 import RestoreIcon from '@mui/icons-material/Restore';
+import { Box, Button, LinearProgress, linearProgressClasses, styled, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import type { ResumeMedia } from "../../../types/content";
+import { setMediaItem } from "../store/playContentSlice";
+import { selectServerId, selectServerState, selectToken } from "../store/serverSlice";
 import { resumeStorage } from "../useStorage";
+import { getSecureUrl } from "../utils";
+import CoverImage, { defaultSize } from "./ContentCover";
 import DropShadow from "./DropShadow";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -38,11 +38,11 @@ function getProgressPercentage(progress: number, duration: number): number {
 }
 
 function formatSimpleDuration(seconds: number): string {
-  const nf = new Intl.NumberFormat(navigator.language);
-  if (seconds < 60) return `${nf.format(seconds)}s`;
-  if (seconds < 3600) return `${nf.format(Math.floor(seconds / 60))}m`;
-  if (seconds < 86400) return `${nf.format(Math.floor(seconds / 3600))}h`;
-  return `${nf.format(Math.floor(seconds / 86400))}d`;
+    const nf = new Intl.NumberFormat(navigator.language);
+    if (seconds < 60) return `${nf.format(seconds)}s`;
+    if (seconds < 3600) return `${nf.format(Math.floor(seconds / 60))}m`;
+    if (seconds < 86400) return `${nf.format(Math.floor(seconds / 3600))}h`;
+    return `${nf.format(Math.floor(seconds / 86400))}d`;
 }
 
 
@@ -53,7 +53,7 @@ export default function ResumeView() {
     const serverState = useSelector(selectServerState);
     const token = useSelector(selectToken);
     const serverId = useSelector(selectServerId);
-    const [resumeMedia, setResumeMedia] = useState<ResumeMedia|undefined|null>(undefined)
+    const [resumeMedia, setResumeMedia] = useState<ResumeMedia | undefined | null>(undefined)
 
     useEffect(() => {
         const resumeMedia = resumeStorage(serverId)?.get();
@@ -103,7 +103,7 @@ export default function ResumeView() {
                         filter: "blur(5px)",
                         zIndex: -3
                     }}></div>
-                )}                   
+                )}
                 <Box display="none"
                     sx={{
                         position: "absolute",

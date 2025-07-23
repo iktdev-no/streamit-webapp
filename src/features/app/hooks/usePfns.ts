@@ -1,9 +1,9 @@
 import { getToken } from "firebase/messaging";
+import { useEffect, useState } from "react";
 import { messaging, vapidKey } from "../../../lib/firebase";
-import { useState, useEffect } from "react";
+import type { PfnsInfo } from "../../../types/firebase";
 import { PfnsPost } from "../api/apiClient";
 import { pfnsInfoStorage } from "../useStorage";
-import type { PfnsInfo } from "../../../types/firebase";
 
 function getFcmReceiverId(): Promise<string | null> {
     console.log("🔍 Starter token-henting…");

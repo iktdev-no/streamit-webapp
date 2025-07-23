@@ -1,8 +1,7 @@
+import { CircularProgress, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import type { ContentType } from "../../../../types/content";
 import type { Catalog } from "../../../../types/content";
-import { MovieCatalog, SearchCatalog, SerieCatalog } from "../../api/Get";
-import { CircularProgress, Typography, Grid } from "@mui/material";
+import { SearchCatalog } from "../../api/Get";
 import ContentCover from "../../components/ContentCover";
 
 interface ContentGridSearchFragmentProps {
@@ -33,12 +32,12 @@ export default function ContentGridSearchFragment({ query, onContentSelected }: 
             }}>
                 {content.map(item => (
                     <Grid key={item.id}>
-                        <ContentCover 
+                        <ContentCover
                             onClick={() => onContentSelected(item)}
                             src={item.coverSrc}
                             alt={item.title}
                         />
-                        
+
                     </Grid>
                 ))}
             </Grid>
