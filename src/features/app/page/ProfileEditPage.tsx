@@ -58,7 +58,7 @@ export default function ProfileEditPage({ }: ProfileEditPageProps) {
             image: selectedImage?.image,
             imageSrc: selectedImage?.imageSrc
         }
-        UpdateOrCreateProfile(updateProfile).then((success) => {
+        UpdateOrCreateProfile(updateProfile).then(() => {
             dispatch(setProfile(updateProfile))
         }).finally(() => { })
     }

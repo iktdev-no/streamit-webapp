@@ -55,7 +55,7 @@ export default function ContentPage() {
             }}>
                 <BottomNavigation showLabels
                     value={menuItem}
-                    onChange={(event, newValue) => {
+                    onChange={(_event, newValue) => {
                         setMenuItem(newValue)
                         console.log(newValue);
                     }}

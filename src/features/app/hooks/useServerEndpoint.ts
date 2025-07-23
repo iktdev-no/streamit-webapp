@@ -3,19 +3,6 @@ import type { ServerInfo } from '../../../types/serverInfo';
 import { serverAccessTokenStorage } from '../useStorage';
 import { Logger, useLogger } from '../utils';
 
-interface NavigatorStandalone extends Navigator {
-  standalone?: boolean;
-}
-
-function isStandaloneMode(): boolean {
-  const log = Logger()
-  const standalone =
-    window.matchMedia('(display-mode: standalone)').matches ||
-    (window.navigator as NavigatorStandalone).standalone === true;
-
-  log.info(`Display mode: ${standalone ? 'standalone' : 'browser'}`);
-  return standalone;
-}
 
 export async function probeHeartbeat(url: string): Promise<boolean> {
   const log = Logger()

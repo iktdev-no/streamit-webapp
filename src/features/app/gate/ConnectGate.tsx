@@ -11,7 +11,7 @@ interface ConnectGateProps {
   onRequiresSetup: () => void;
 }
 
-export function ConnectGate({ onReady, onRequiresSetup }: ConnectGateProps) {
+export function ConnectGate({ onReady }: ConnectGateProps) {
   const [requiresAuth, setRequiresAuth] = useState(false);
   const dispatch = useDispatch();
   const server = serverStorage.get();

@@ -8,7 +8,7 @@ import { setProfile } from "../store/appSlice";
 
 export default function ProfileGate() {
     const [profiles, setProfiles] = useState<Profile[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [, setLoading] = useState(true);
     const dispatch = useDispatch();
     useEffect(() => {
         Profiles().then(setProfiles).finally(() => setLoading(false))

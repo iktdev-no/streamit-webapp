@@ -1,6 +1,6 @@
 import HttpIcon from '@mui/icons-material/Http';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import logo from '../../../assets/logo.svg';
 import type { ServerInfo } from "../../../types/serverInfo";
@@ -18,9 +18,8 @@ interface SetupGateProps {
 type ActiveMode = 'manual' | 'qr' | null
 
 export default function SetupGate({ setServer }: SetupGateProps) {
-  const theme = useTheme();
   const [activeMode, setActiveMode] = useState<ActiveMode>(null);
-  const { pfnsInfo, loading: pfnsLoading } = usePfns();
+  const { pfnsInfo } = usePfns();
   const pinCode = generateRandomPin(6)
 
   const pfnsObject: PfnsObject | null = useMemo(() => {

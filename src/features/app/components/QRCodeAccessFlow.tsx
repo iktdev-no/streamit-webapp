@@ -1,4 +1,4 @@
-import { Box, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useState } from "react";
 import type { ServerInfo } from "../../../types/serverInfo";
@@ -14,7 +14,6 @@ export interface QRCodeAccessFlowProps {
 }
 
 export default function QRCodeAccessFlow({ pfnsObject, setServer }: QRCodeAccessFlowProps) {
-    const theme = useTheme();
 
     const [flowStep, setFlowStep] = useState<SetupFlowStep>('idle');
     const [incomingServer, setIncomingServer] = useState<ServerInfo | null>(null);

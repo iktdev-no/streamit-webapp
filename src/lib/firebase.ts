@@ -1,5 +1,4 @@
 // Import the functions you need from the SDKs you need
-import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getMessaging } from "firebase/messaging";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -24,7 +23,6 @@ console.log("Firebase config:", firebaseConfig);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
 
 export { messaging, vapidKey };

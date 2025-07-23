@@ -7,7 +7,7 @@ import ShakaPlayerComponent from "../components/ShakaPlayerComponent";
 import { selectMediaItem, type MediaItem } from "../store/playContentSlice";
 import { selectServerId, selectServerState, selectToken } from "../store/serverSlice";
 import { resumeStorage } from "../useStorage";
-import { getLanguageNameFromISO3, getSecureUrl, useVideoDecoderSupport } from "../utils";
+import { getLanguageNameFromISO3, getSecureUrl } from "../utils";
 
 export interface TrackConfig {
     kind: "subtitles";
@@ -36,7 +36,7 @@ export function buildTracks(subtitles: Subtitle[]): TrackConfig[] {
 function getEpisodeOnSerie(mediaItem: MediaItem): Episode | null {
     const catalog = mediaItem.catalog;
     if (catalog.type === 'Serie') {
-        const episode = (catalog as Serie).episodes.find((value, i) => value.video === mediaItem.video);
+        const episode = (catalog as Serie).episodes.find((value) => value.video === mediaItem.video);
         if (episode) {
             return episode;
         }
@@ -72,7 +72,6 @@ export default function ContentPlayPage() {
     const token = useSelector(selectToken);
     const serverState = useSelector(selectServerState);
     const serverId = useSelector(selectServerId);
-    const codecs = useVideoDecoderSupport()
 
     if (!mediaItem) {
         navigate(-2);
@@ -97,7 +96,7 @@ export default function ContentPlayPage() {
     }
 
     const videoUrl = getSecureUrl(mediaItem!.videoSrc!, serverState, token)
-    const subtitles = buildTracks(mediaItem?.subtitles ?? []).map((item, index) => {
+    const subtitles = buildTracks(mediaItem?.subtitles ?? []).map((item) => {
         return {
             ...item,
             src: getSecureUrl(item.src, serverState, token)
