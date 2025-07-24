@@ -1,8 +1,12 @@
 import react from '@vitejs/plugin-react';
 import fs from 'fs';
+import pkg from 'js-beautify';
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+const { html: beautifyHtml } = pkg;
+
+
 
 export default defineConfig(({ mode }) => {
   // Hent miljøvariabler eksplisitt
@@ -68,17 +72,42 @@ export default defineConfig(({ mode }) => {
 
       // 📄 Kopier manifest til .json
       {
-        name: 'duplicate-manifest-as-json',
+        name: 'duplicate-manifest-and-patch-html',
+        apply: 'build',
         closeBundle() {
-          const dist = path.resolve(__dirname, 'dist');
-          const source = path.join(dist, 'manifest.webmanifest');
-          const target = path.join(dist, 'manifest.json');
 
-          if (fs.existsSync(source)) {
-            fs.copyFileSync(source, target);
+          const distDir = path.resolve(__dirname, 'dist');
+          const sourceManifest = path.join(distDir, 'manifest.webmanifest');
+          const targetManifest = path.join(distDir, 'manifest.json');
+          const indexHtmlPath = path.join(distDir, 'index.html');
+
+          // 🔁 Kopier manifest.webmanifest → manifest.json
+          if (fs.existsSync(sourceManifest)) {
+            fs.copyFileSync(sourceManifest, targetManifest);
             console.log('📄 manifest.json kopiert fra manifest.webmanifest');
           } else {
             console.warn('⚠️ Fant ikke manifest.webmanifest – kunne ikke kopiere');
+            return;
+          }
+
+          // 🧩 Patch index.html
+          if (fs.existsSync(indexHtmlPath)) {
+            let html = fs.readFileSync(indexHtmlPath, 'utf8');
+
+            const extraLink = `<link rel="manifest" href="/manifest.json">`;
+            if (!html.includes(extraLink)) {
+              html = html.replace('</head>', `  ${extraLink}\n</head>`);
+            }
+
+            // ✨ Prettyprint!
+            const prettyHtml = beautifyHtml(html, {
+              indent_size: 2,
+              wrap_line_length: 120,
+              preserve_newlines: true
+            });
+
+            fs.writeFileSync(indexHtmlPath, prettyHtml);
+            console.log('✨ index.html patched og formatert med prettyprint!');
           }
         }
       },
