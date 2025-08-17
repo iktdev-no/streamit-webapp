@@ -7,12 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { type Catalog, type Episode, type Movie, type Serie, type Summary } from "../../../types/content";
+import { RemoveFavorite } from '../api/Delete';
 import { GetMovie, GetSerie, GetSummary } from "../api/Get";
+import { AddFavorite } from '../api/Put';
 import CoverImage from "../components/ContentCover";
 import EpisodeList from "../components/EpisodeList";
 import Header from "../components/Header";
 import SummaryView from "../components/SummaryView";
-import { selectedContent } from "../store/appSlice";
+import { selectedContent, selectedUserId } from "../store/appSlice";
 import { setMediaItem, type MediaItem } from "../store/playContentSlice";
 import { selectServerId, selectServerState, selectToken } from "../store/serverSlice";
 import { favoriteStorage } from "../useStorage";
@@ -28,7 +30,9 @@ export default function ContentDetailPage() {
     const [loading, setLoading] = useState(true);
     const token = useSelector(selectToken);
     const serverState = useSelector(selectServerState);
-    const favorites = favoriteStorage(useSelector(selectServerId))
+    const serverId = useSelector(selectServerId)
+    const userId = useSelector(selectedUserId)
+    const favorites = userId ? favoriteStorage(`${serverId}_${userId}`) : undefined;
 
 
 
@@ -85,9 +89,15 @@ export default function ContentDetailPage() {
         const stored: number[] = favorites?.get() ?? []
         if (isFavorited) {
             favorites?.set(stored.filter((id) => id != content.id) ?? [])
+            if (userId) {
+                RemoveFavorite(userId, content.id)
+            }
         } else {
             stored.push(content.id)
             favorites?.set(stored)
+            if (userId) {
+                AddFavorite(userId, content.id)
+            }
         }
         setFavorited(!isFavorited);
 

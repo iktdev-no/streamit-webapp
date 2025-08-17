@@ -64,6 +64,21 @@ export async function GetNew(): Promise<Catalog[]> {
     })
 }
 
+export async function GetFavoritesCatalog(userId: string): Promise<Catalog[]> {
+  const response = await WebGet<Catalog[]>(["favorites", userId]);
+  return response.data
+    .map(item => {
+      return {
+        ...item,
+        coverSrc: setCoverSrc(response.url, item)
+      }
+    })
+}
+
+export async function GetUserFavorites(userId: string): Promise<number[]> {
+  return (await WebGet<number[]>(["favorites", userId, "ids"])).data
+}
+
 export async function GetUpdated(): Promise<Catalog[]> {
   const response = await WebGet<Catalog[]>(["catalog", "updated"]);
   return response.data

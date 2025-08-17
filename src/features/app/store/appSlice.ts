@@ -36,3 +36,5 @@ export const selectProfile = (state: RootState) => state.app.profile;
 export const selectedContent = (state: RootState) => state.app.selectedContent;
 export const showServerBanner = (state: RootState) => state.app.showServerBanner;
 export default appSlice.reducer
+
+export const selectedUserId = (state: RootState) => state.app.profile?.guid;

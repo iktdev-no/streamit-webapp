@@ -184,3 +184,131 @@ export async function WebPost<T>(baseUrlOrPath: string | string[], pathOrBody: s
         throw new Error(`WebPost: Error while reading response from ${absoluteUrl}: ${error}`);
     }
 }
+
+// Overloads
+export function WebPut<T>(path: string[], body: any): Promise<WebResponse<T>>;
+export function WebPut<T>(baseUrl: string, path: string[], body: any): Promise<WebResponse<T>>;
+
+// Implementasjon
+export async function WebPut<T>(baseUrlOrPath: string | string[], pathOrBody: string[] | any, maybeBody?: any): Promise<WebResponse<T>> {
+    const serverState = store.getState().server;
+    const headers = Headers(isRemote(serverState), serverState.token);
+
+    let baseUrl: string | null;
+    let path: string[];
+    let body: any;
+
+    if (typeof baseUrlOrPath === 'string') {
+        baseUrl = baseUrlOrPath;
+        path = pathOrBody as string[];
+        body = maybeBody;
+    } else {
+        path = baseUrlOrPath;
+        body = pathOrBody;
+        baseUrl = serverState.activeUrl;
+        if (!baseUrl) {
+            throw new Error("There is no activeUrl defined");
+        }
+    }
+
+    const absoluteUrl = getAbsoluteUrl(baseUrl, ["api", ...path]);
+
+    const res = await fetch(absoluteUrl, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+        throw new Error(`WebPut: ${res.status} ${res.statusText}`);
+    }
+
+    const contentType = res.headers.get("Content-Type");
+
+    try {
+        if (contentType && contentType.includes("application/json")) {
+            const response = await res.json() as T;
+            return {
+                status: res.status,
+                url: baseUrl,
+                data: response,
+            };
+        } else {
+            const responseText = await res.text();
+            return {
+                status: res.status,
+                url: baseUrl,
+                data: responseText as unknown as T,
+            };
+        }
+    } catch (error) {
+        console.warn(`WebPut: Failed to parse response from ${absoluteUrl}`, error);
+        throw new Error(`WebPut: Error while reading response from ${absoluteUrl}: ${error}`);
+    }
+}
+
+// Overloads
+export function WebDelete<T>(path: string[], body?: any): Promise<WebResponse<T>>;
+export function WebDelete<T>(baseUrl: string, path: string[], body?: any): Promise<WebResponse<T>>;
+
+// Implementasjon
+export async function WebDelete<T>(
+    baseUrlOrPath: string | string[],
+    pathOrBody?: string[] | any,
+    maybeBody?: any
+): Promise<WebResponse<T>> {
+    const serverState = store.getState().server;
+    const headers = Headers(isRemote(serverState), serverState.token);
+
+    let baseUrl: string | null;
+    let path: string[];
+    let body: any;
+
+    if (typeof baseUrlOrPath === 'string') {
+        baseUrl = baseUrlOrPath;
+        path = pathOrBody as string[];
+        body = maybeBody;
+    } else {
+        path = baseUrlOrPath;
+        body = pathOrBody;
+        baseUrl = serverState.activeUrl;
+        if (!baseUrl) {
+            throw new Error("There is no activeUrl defined");
+        }
+    }
+
+    const absoluteUrl = getAbsoluteUrl(baseUrl, ["api", ...path]);
+
+    const res = await fetch(absoluteUrl, {
+        method: 'DELETE',
+        headers,
+        body: body ? JSON.stringify(body) : undefined,
+    });
+
+    if (!res.ok) {
+        throw new Error(`WebDelete: ${res.status} ${res.statusText}`);
+    }
+
+    const contentType = res.headers.get("Content-Type");
+
+    try {
+        if (contentType && contentType.includes("application/json")) {
+            const response = await res.json() as T;
+            return {
+                status: res.status,
+                url: baseUrl,
+                data: response,
+            };
+        } else {
+            const responseText = await res.text();
+            return {
+                status: res.status,
+                url: baseUrl,
+                data: responseText as unknown as T,
+            };
+        }
+    } catch (error) {
+        console.warn(`WebDelete: Failed to parse response from ${absoluteUrl}`, error);
+        throw new Error(`WebDelete: Error while reading response from ${absoluteUrl}: ${error}`);
+    }
+}

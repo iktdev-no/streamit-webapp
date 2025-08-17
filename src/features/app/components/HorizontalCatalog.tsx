@@ -1,6 +1,6 @@
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Typography, type SxProps, type Theme } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import type { Catalog } from '../../../types/content';
@@ -9,10 +9,11 @@ import ContentCover from './ContentCover';
 interface HorizontalCatalogProps {
     title?: string;
     items?: Catalog[];
+    sx?: SxProps<Theme>;
     onItemClick?: (item: Catalog) => void;
 }
 
-export default function HorizontalCatalog({ title, items, onItemClick }: HorizontalCatalogProps) {
+export default function HorizontalCatalog({ title, items, onItemClick, sx }: HorizontalCatalogProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [isDown, setIsDown] = useState(false);
     const [startX, setStartX] = useState(0);
@@ -60,7 +61,8 @@ export default function HorizontalCatalog({ title, items, onItemClick }: Horizon
 
     return (
         <Box className="scroller-container" sx={{
-            position: 'relative'
+            position: 'relative',
+            ...sx
         }}>
             {title && <Typography variant="h6" ml="64px" align='left' gutterBottom>{title}</Typography>}
 
