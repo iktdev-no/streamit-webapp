@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import { Collapse, IconButton, InputBase } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
@@ -22,6 +23,13 @@ export default function HeaderSearchField({
     setShowInput(true);
     setTimeout(() => inputRef.current?.focus(), 0);
   };
+
+  const closeSeacrh = () => {
+    onChange("");
+    setShowInput(false);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  }
+
 
   useEffect(() => {
     if (!showInput && value.length > 0) {
@@ -62,6 +70,15 @@ export default function HeaderSearchField({
             onBlur={handleBlur}
             sx={{ color: 'white', width: '100%' }}
           />
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="search"
+            onClick={closeSeacrh}
+            sx={{ padding: 0.2, marginRight: -0.5 }}
+          >
+            <CloseIcon />
+          </IconButton>
         </div>
       </Collapse>
     </div>

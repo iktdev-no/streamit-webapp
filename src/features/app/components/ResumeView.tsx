@@ -149,7 +149,7 @@ export default function ResumeView() {
                             navigate("/play")
                         }}
                         sx={{ marginTop: 3 }} variant="contained" startIcon={<PlayArrowIcon />}>
-                        Gjennopta
+                        <Typography variant="h6" sx={{ textTransform: 'none' }}>Fortsett å se</Typography>
                     </Button>
                 </Box>
             </Box>
